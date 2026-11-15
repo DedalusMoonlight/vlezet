@@ -3,23 +3,23 @@
   "rows": [
     {
       "id": "01",
-      "timeToReadyMs": 177
+      "timeToReadyMs": 271
     },
     {
       "id": "02",
-      "timeToReadyMs": 133
+      "timeToReadyMs": 227
     },
     {
       "id": "03",
-      "timeToReadyMs": 245
+      "timeToReadyMs": 239
     },
     {
       "id": "04",
-      "timeToReadyMs": 231
+      "timeToReadyMs": 237
     },
     {
       "id": "05",
-      "timeToReadyMs": 236
+      "timeToReadyMs": 237
     },
     {
       "id": "06",
@@ -27,23 +27,23 @@
     },
     {
       "id": "07",
-      "timeToReadyMs": 238
-    },
-    {
-      "id": "08",
-      "timeToReadyMs": 235
-    },
-    {
-      "id": "09",
       "timeToReadyMs": 239
     },
     {
+      "id": "08",
+      "timeToReadyMs": 228
+    },
+    {
+      "id": "09",
+      "timeToReadyMs": 242
+    },
+    {
       "id": "10",
-      "timeToReadyMs": 236
+      "timeToReadyMs": 240
     },
     {
       "id": "11",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 234
     },
     {
       "id": "12",
@@ -51,15 +51,15 @@
     },
     {
       "id": "13",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 227
     },
     {
       "id": "14",
-      "timeToReadyMs": 235
+      "timeToReadyMs": 242
     },
     {
       "id": "15",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 236
     },
     {
       "id": "16",
@@ -67,7 +67,7 @@
     },
     {
       "id": "17",
-      "timeToReadyMs": 238
+      "timeToReadyMs": 236
     },
     {
       "id": "18",
@@ -75,12 +75,12 @@
     },
     {
       "id": "19",
-      "timeToReadyMs": 234
+      "timeToReadyMs": 239
     },
     {
       "id": "20",
       "timeToReadyMs": 237
     }
   ],
-  "fps": 60.17804744830371
+  "fps": 60.210987260432155
 }

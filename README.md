@@ -30,6 +30,7 @@ Production PWA: `npm run build`, затем `npm run preview`. Сервис-во
 
 - [Запуск, API и эксплуатация](docs/running.md)
 - [Приёмка и ограничения проверки](docs/acceptance.md)
+- [Итоговое ревью и принятые решения](docs/review.md)
 - [Сценарий демонстрации](docs/demo.md)
 - [Техническое задание](outputs/cargo-p0-spec.md)
 - [План реализации](docs/superpowers/plans/2026-11-15-cargo-p0.md)

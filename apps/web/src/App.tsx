@@ -53,7 +53,7 @@ export default function App() {
         <div className="save-status" role="status">
           {saved.status}
         </div>
-        <PwaStatus />
+        <PwaStatus saveStatus={saved.status} />
         <div className="toolbar">
           <ImportWizard />
           <ExportTools />

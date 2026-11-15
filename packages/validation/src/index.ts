@@ -5,3 +5,4 @@ export * from "./supports";
 export * from "./loads";
 export * from "./sequence";
 export * from "./validate";
+export * from "./feasibility";

@@ -42,3 +42,7 @@ it("migrates the original envelope but refuses future versions", async () => {
   ).toBe(1);
   expect(() => migrateStored({ id: "active", version: 99 })).toThrow();
 });
+it("restores a cancelled calculation even before its first result", async () => {
+  await saveProject(makeProject(), null, null, true);
+  expect((await loadProject("active"))?.cancelled).toBe(true);
+});

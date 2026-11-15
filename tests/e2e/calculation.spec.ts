@@ -33,20 +33,18 @@ test("cancel remains explicit even when a partial result is available", async ({
     })),
   );
   await page.goto("/");
-  await page
-    .getByLabel("Файл проекта JSON")
-    .setInputFiles({
-      name: "cancel.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(
-        JSON.stringify({
-          format: "vlezet",
-          schemaVersion: 1,
-          input,
-          solution: null,
-        }),
-      ),
-    });
+  await page.getByLabel("Файл проекта JSON").setInputFiles({
+    name: "cancel.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(
+      JSON.stringify({
+        format: "vlezet",
+        schemaVersion: 1,
+        input,
+        solution: null,
+      }),
+    ),
+  });
   await page
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
@@ -56,4 +54,9 @@ test("cancel remains explicit even when a partial result is available", async ({
   await expect(page.getByText("Расчёт отменён", { exact: true })).toBeVisible({
     timeout: 3000,
   });
+  await expect(
+    page.getByText("Сохранено на устройстве", { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("Расчёт отменён", { exact: true })).toBeVisible();
 });

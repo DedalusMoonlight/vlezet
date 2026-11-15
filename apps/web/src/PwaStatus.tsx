@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { registerSW } from "virtual:pwa-register";
 import { useProject } from "./features/project/store";
-export function PwaStatus() {
+import { updateBlocker } from "./updateGuard";
+export function PwaStatus({ saveStatus }: { saveStatus: string }) {
   const [offline, setOffline] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [update, setUpdate] = useState<null | (() => void)>(null);
@@ -17,10 +18,6 @@ export function PwaStatus() {
       onRegisterError: () => setMessage("Офлайн-кеш пока недоступен"),
     });
     setUpdate(() => () => {
-      if (document.querySelector('[role="dialog"]')) {
-        setMessage("Сначала сохраните и закройте открытый редактор");
-        return;
-      }
       void reload(true);
     });
   }, []);
@@ -34,7 +31,21 @@ export function PwaStatus() {
             : "Готовим офлайн-кеш…"}
       </span>
       {refresh && (
-        <button disabled={running} onClick={() => update?.()}>
+        <button
+          disabled={running}
+          onClick={() => {
+            const blocker = updateBlocker({
+              running,
+              saveStatus,
+              editorOpen: !!document.querySelector('[role="dialog"]'),
+              dirty: !!document.querySelector('[data-unsaved="true"]'),
+              invalid: !!document.querySelector('[aria-invalid="true"]'),
+              exporting: !!document.querySelector('[data-exporting="true"]'),
+            });
+            if (blocker) setMessage(blocker);
+            else update?.();
+          }}
+        >
           Обновить приложение
         </button>
       )}

@@ -9,7 +9,7 @@ import {
   geometryIssues,
   validateLayout,
   validatePlan,
-  issue,
+  infeasibilityProof,
   type ValidationIssue,
 } from "../../validation/src";
 import { shelfLayout } from "./shelves";
@@ -76,51 +76,7 @@ export async function search(
   };
   let best = makeSolution([], "not-found");
   let bestScore = score(input, []);
-  const proof: ValidationIssue[] = [];
-  const m = input.settings.wallGapMm;
-  const usable = [
-    input.vehicle.lengthMm - 2 * m,
-    input.vehicle.widthMm - 2 * m,
-    input.vehicle.heightMm - m,
-  ];
-  for (const t of input.cargoTypes.filter((t) => t.required))
-    if (
-      !enumerateOrientations(t).some((o) =>
-        orientedDimensions(t, o).every((d, i) => d <= usable[i]),
-      )
-    )
-      proof.push(
-        issue(
-          "oversize",
-          input.instances.filter((i) => i.typeId === t.id).map((i) => i.id),
-          "Обязательная коробка не помещается ни в одном разрешённом положении",
-        ),
-      );
-  if (
-    input.cargoTypes
-      .filter((t) => t.required)
-      .reduce((s, t) => s + t.massG * t.quantity, 0) > input.vehicle.payloadG
-  )
-    proof.push(
-      issue(
-        "required-weight",
-        [],
-        "Масса обязательных грузов превышает грузоподъёмность",
-      ),
-    );
-  if (
-    input.cargoTypes
-      .filter((t) => t.required)
-      .reduce((s, t) => s + volume(t) * t.quantity, 0) >
-    Math.max(0, usable[0]) * Math.max(0, usable[1]) * Math.max(0, usable[2])
-  )
-    proof.push(
-      issue(
-        "required-volume",
-        [],
-        "Объём обязательных грузов превышает полезный объём",
-      ),
-    );
+  const proof = infeasibilityProof(input);
   if (proof.length) return makeSolution([], "proven-infeasible", proof);
   const stopped = () =>
     options.signal.aborted || performance.now() - start >= options.deadlineMs;

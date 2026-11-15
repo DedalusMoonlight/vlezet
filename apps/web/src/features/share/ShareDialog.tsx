@@ -27,7 +27,13 @@ export function ShareDialog() {
     }
   };
   const publish = async () => {
-    if (!currentSolution) return;
+    if (
+      !currentSolution ||
+      currentSolution.status !== "ready" ||
+      !agree ||
+      busy
+    )
+      return;
     setBusy(true);
     setError("");
     try {
@@ -66,7 +72,6 @@ export function ShareDialog() {
   return (
     <>
       <button
-        disabled={currentSolution?.status !== "ready"}
         onClick={() => {
           setOpen(true);
           void load();
@@ -106,11 +111,17 @@ export function ShareDialog() {
             </label>
             <button
               className="primary"
-              disabled={!agree || busy}
+              disabled={!agree || busy || currentSolution?.status !== "ready"}
               onClick={() => void publish()}
             >
               {busy ? "Создаём…" : "Создать ссылку"}
             </button>
+            {currentSolution?.status !== "ready" && (
+              <p className="hint">
+                Для новой ссылки сначала рассчитайте план. Старые снимки можно
+                удалить ниже.
+              </p>
+            )}
             {result && (
               <>
                 <label>

@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx";
+import { boundedZip } from "./zip";
 import {
   cargoSchema,
   faces,
@@ -26,51 +27,6 @@ export type TablePreview = {
 export type ColumnMapping = Partial<Record<keyof CargoType, number>>;
 export type ImportUnits = { dimensions: "mm" | "cm" | "m"; mass: "kg" | "g" };
 export type ImportDraft = { cargo: CargoType[]; issues: ImportIssue[] };
-function checkZip(bytes: Uint8Array) {
-  if (bytes[0] !== 80 || bytes[1] !== 75) return;
-  const d = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  let end = -1;
-  for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--)
-    if (d.getUint32(i, true) === 0x06054b50) {
-      end = i;
-      break;
-    }
-  if (end < 0) throw new Error("Недостоверный ZIP-заголовок");
-  if (d.getUint16(end + 4, true) || d.getUint16(end + 6, true))
-    throw new Error("Составной ZIP не поддерживается");
-  let pos = d.getUint32(end + 16, true),
-    total = 0;
-  const entries = d.getUint16(end + 10, true);
-  if (entries === 65535 || entries > 10000)
-    throw new Error("Слишком много ZIP-файлов");
-  for (let i = 0; i < entries; i++) {
-    if (pos + 46 > end || d.getUint32(pos, true) !== 0x02014b50)
-      throw new Error("Недостоверная метаинформация ZIP");
-    const original = d.getUint32(pos + 24, true),
-      compressed = d.getUint32(pos + 20, true),
-      offset = d.getUint32(pos + 42, true);
-    total += original;
-    if (total > 50 * 1024 * 1024 || original === 0xffffffff)
-      throw new Error("Распакованный XLSX превышает 50 МиБ");
-    if (
-      offset + 30 > bytes.length ||
-      d.getUint32(offset, true) !== 0x04034b50 ||
-      offset +
-        30 +
-        d.getUint16(offset + 26, true) +
-        d.getUint16(offset + 28, true) +
-        compressed >
-        pos
-    )
-      throw new Error("Недостоверный размер ZIP");
-    pos +=
-      46 +
-      d.getUint16(pos + 28, true) +
-      d.getUint16(pos + 30, true) +
-      d.getUint16(pos + 32, true);
-  }
-  if (pos !== end) throw new Error("Неподдерживаемая структура ZIP");
-}
 export function parseTable(
   bytes: Uint8Array,
   options: {
@@ -87,7 +43,7 @@ export function parseTable(
     options.headerRow > 1000
   )
     throw new Error("Строка заголовка: от 1 до 1000");
-  checkZip(bytes);
+  bytes = boundedZip(bytes);
   const binary =
     (bytes[0] === 80 && bytes[1] === 75) ||
     (bytes[0] === 208 && bytes[1] === 207);

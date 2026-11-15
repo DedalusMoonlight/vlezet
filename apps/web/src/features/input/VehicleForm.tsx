@@ -15,7 +15,7 @@ export function VehicleForm() {
   const dirty =
     JSON.stringify(draft) !== JSON.stringify(input.vehicle) || !confirmed;
   return (
-    <section className="card">
+    <section className="card" data-unsaved={dirty}>
       <span className="eyebrow">01 / НА ЧЁМ ЕДЕМ</span>
       <h2>Место для всего</h2>
       <form

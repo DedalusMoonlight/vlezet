@@ -20,14 +20,16 @@ export type SavedProject = {
   solution: Solution | null;
   playback: PlaybackState | null;
   stale: boolean;
+  cancelled: boolean;
 };
 export async function saveProject(
   input: ProjectInput,
   solution: Solution | null,
   playback: PlaybackState | null,
+  cancelled = false,
 ): Promise<void> {
   const stale = !!solution && solution.inputRevisionId !== input.revisionId;
-  const bytes = encodeProject(input, solution);
+  const bytes = encodeProject(input, solution, { cancelled });
   await db.transaction("rw", db.projects, () =>
     db.projects.put({
       id: "active",
@@ -73,7 +75,7 @@ export async function loadProject(id: string): Promise<SavedProject | null> {
   const raw = await db.projects.get(id);
   if (!raw) return null;
   const stored = migrateStored(raw);
-  const { input, solution } = decodeProject(stored.bytes);
+  const { input, solution, cancelled } = decodeProject(stored.bytes);
   const parsed = playbackSchema.safeParse(stored.playback);
   const playback =
     solution &&
@@ -88,5 +90,5 @@ export async function loadProject(id: string): Promise<SavedProject | null> {
           ),
         }
       : null;
-  return { input, solution, playback, stale: stored.stale };
+  return { input, solution, playback, stale: stored.stale, cancelled };
 }

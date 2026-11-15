@@ -1,6 +1,8 @@
-import { it, expect } from "vitest";
+import { it, expect, vi } from "vitest";
+import { zipSync, unzipSync, Zip, ZipDeflate } from "fflate";
 import * as XLSX from "xlsx";
-import { parseTable, mapCargo } from "./table";
+import { parseTable, mapCargo, templateXlsx } from "./table";
+vi.mock("xlsx", { spy: true });
 const mapping = {
   name: 0,
   lengthMm: 1,
@@ -46,13 +48,37 @@ it("CSV missing mass, unknown unit and quantity overflow are explicit errors", (
     [3, "quantity"],
   ]);
   expect(() =>
-    mapCargo(p, mapping, { dimensions: "inch", mass: "kg" } as unknown as import("./table").ImportUnits),
+    mapCargo(p, mapping, {
+      dimensions: "inch",
+      mass: "kg",
+    } as unknown as import("./table").ImportUnits),
   ).toThrow();
 });
 it("rejects oversize compressed input before parsing", () => {
   expect(() =>
     parseTable(new Uint8Array(10 * 1024 * 1024 + 1), { headerRow: 1 }),
   ).toThrow(/10/);
+});
+it("rejects conflicting local ZIP sizes before SheetJS can allocate them", () => {
+  const bytes = zipSync({ "test.xml": new TextEncoder().encode("test") });
+  new DataView(bytes.buffer).setUint32(22, 0x40000000, true);
+  const read = vi.mocked(XLSX.read);
+  read.mockClear();
+  expect(() => parseTable(bytes, { headerRow: 1 })).toThrow(/ZIP/);
+  expect(read).not.toHaveBeenCalled();
+  read.mockRestore();
+});
+it("bounds actual inflation even when both ZIP headers understate size", () => {
+  const bytes = zipSync({ "test.xml": new Uint8Array(1024 * 1024) });
+  const view = new DataView(bytes.buffer);
+  view.setUint32(22, 8, true);
+  const central = view.getUint32(bytes.length - 6, true);
+  view.setUint32(central + 24, 8, true);
+  const read = vi.mocked(XLSX.read);
+  read.mockClear();
+  expect(() => parseTable(bytes, { headerRow: 1 })).toThrow(/ZIP/);
+  expect(read).not.toHaveBeenCalled();
+  read.mockRestore();
 });
 it("reads actual XLS and Windows-1251 fixtures", async () => {
   const { readFileSync } = await import("node:fs");
@@ -70,4 +96,25 @@ it("reads actual XLS and Windows-1251 fixtures", async () => {
     { headerRow: 1, encoding: "windows-1251", delimiter: ";" },
   );
   expect(mapCargo(p, mapping, units).cargo[0].name).toBe("Ящик");
+});
+
+it("accepts compressed XLSX with streaming data descriptors and normalises it", () => {
+  const chunks: Uint8Array[] = [];
+  const zip = new Zip((error, data) => {
+    if (error) throw error;
+    chunks.push(data);
+  });
+  for (const [name, bytes] of Object.entries(unzipSync(templateXlsx()))) {
+    const entry = new ZipDeflate(name);
+    zip.add(entry);
+    entry.push(bytes, true);
+  }
+  zip.end();
+  const bytes = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.length;
+  }
+  expect(parseTable(bytes, { headerRow: 1 }).rows[0][0]).toBe("Коробка");
 });

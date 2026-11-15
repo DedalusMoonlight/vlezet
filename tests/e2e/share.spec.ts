@@ -30,6 +30,17 @@ test("publishes an immutable snapshot, opens it and deletes it with author secre
   await expect(
     receiver.getByText("Шаг 1 из 18", { exact: true }),
   ).toBeVisible();
+  await dialog.getByRole("button", { name: "Закрыть публикацию" }).click();
+  await page
+    .getByLabel(/Обязательный:/)
+    .first()
+    .uncheck();
+  await page
+    .getByRole("button", { name: "Поделиться планом", exact: true })
+    .click({ timeout: 3000 });
+  await expect(
+    dialog.getByRole("button", { name: "Создать ссылку", exact: true }),
+  ).toBeDisabled();
   await dialog
     .getByRole("button", { name: "Удалить снимок", exact: true })
     .last()

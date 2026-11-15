@@ -26,6 +26,7 @@ export function useAutosave() {
               s.input,
               s.currentSolution ?? s.staleSolution,
               p.playback,
+              s.status === "cancelled",
             ),
           )
           .then(() => {
@@ -41,7 +42,9 @@ export function useAutosave() {
       .then((saved) => {
         if (!alive) return;
         if (saved) {
-          useProject.getState().restore(saved.input, saved.solution);
+          useProject
+            .getState()
+            .restore(saved.input, saved.solution, saved.cancelled);
           usePlayback.getState().setPlayback(saved.playback);
           setStatus(
             saved.stale
@@ -61,7 +64,8 @@ export function useAutosave() {
           if (
             s.input !== p.input ||
             s.currentSolution !== p.currentSolution ||
-            s.staleSolution !== p.staleSolution
+            s.staleSolution !== p.staleSolution ||
+            (s.status === "cancelled") !== (p.status === "cancelled")
           )
             write();
         });

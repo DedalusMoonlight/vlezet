@@ -4,6 +4,7 @@ import {
   validatePlan,
   placementSchema,
   orientedDimensions,
+  infeasibilityProof,
 } from "@vlezet/validation";
 import type { Solution } from "@vlezet/packing";
 const portableSolution = z.object({
@@ -38,16 +39,21 @@ export function restoreSolution(
     volume += orientedDimensions(c, p.orientation).reduce((a, b) => a * b, 1);
     mass += c.massG;
   }
+  const proof = infeasibilityProof(input);
   return {
     ...saved,
     unplacedIds: unplaced.map((i) => i.id),
-    status: unplaced.some(
-      (i) => input.cargoTypes.find((t) => t.id === i.typeId)!.required,
-    )
-      ? "partial"
-      : "ready",
+    status: proof.length
+      ? "proven-infeasible"
+      : unplaced.some(
+            (i) => input.cargoTypes.find((t) => t.id === i.typeId)!.required,
+          )
+        ? saved.placements.length
+          ? "partial"
+          : "not-found"
+        : "ready",
     report,
-    issues: [],
+    issues: proof,
     metrics: {
       placedCount: ids.size,
       placedVolumeMm3: volume,
@@ -58,12 +64,14 @@ export function restoreSolution(
 export function encodeProject(
   input: ProjectInput,
   solution: Solution | null,
+  state: { cancelled?: boolean } = {},
 ): Uint8Array {
   return new TextEncoder().encode(
     JSON.stringify({
       format: "vlezet",
       schemaVersion: 1,
       input: parseProject(input),
+      cancelled: state.cancelled ?? false,
       solution: solution
         ? {
             inputRevisionId: solution.inputRevisionId,
@@ -77,6 +85,7 @@ export function encodeProject(
 export function decodeProject(bytes: Uint8Array): {
   input: ProjectInput;
   solution: Solution | null;
+  cancelled: boolean;
 } {
   if (bytes.length > 1024 * 1024) throw new Error("JSON больше 1 МиБ");
   const raw = z
@@ -85,8 +94,13 @@ export function decodeProject(bytes: Uint8Array): {
       schemaVersion: z.literal(1),
       input: z.unknown(),
       solution: z.unknown(),
+      cancelled: z.boolean().default(false),
     })
     .parse(JSON.parse(new TextDecoder().decode(bytes)));
   const input = parseProject(raw.input);
-  return { input, solution: restoreSolution(input, raw.solution) };
+  return {
+    input,
+    solution: restoreSolution(input, raw.solution),
+    cancelled: raw.cancelled,
+  };
 }

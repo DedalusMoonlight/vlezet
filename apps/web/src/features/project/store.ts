@@ -11,7 +11,11 @@ let worker: Worker | null = null;
 type Store = ProjectState & {
   setInput: (input: ProjectInput) => void;
   setSolution: (solution: Solution) => void;
-  restore: (input: ProjectInput, solution: Solution | null) => void;
+  restore: (
+    input: ProjectInput,
+    solution: Solution | null,
+    cancelled?: boolean,
+  ) => void;
 };
 export const useProject = create<Store>((set) => ({
   ...createState(demoProject()),
@@ -27,10 +31,14 @@ export const useProject = create<Store>((set) => ({
   },
   setSolution: (solution) =>
     set((s) => projectReducer(s, { kind: "solution", solution })),
-  restore: (input, solution) => {
+  restore: (input, solution, cancelled = false) => {
     worker?.terminate();
     worker = null;
-    set({ ...createState(parseProject(input)), currentSolution: solution });
+    set({
+      ...createState(parseProject(input)),
+      currentSolution: solution,
+      status: cancelled ? "cancelled" : solution ? "done" : "idle",
+    });
   },
 }));
 export function startCalculation(input: ProjectInput, budgetMs = 5000): void {

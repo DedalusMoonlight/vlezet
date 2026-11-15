@@ -3,19 +3,19 @@
   "rows": [
     {
       "id": "01",
-      "timeToReadyMs": 255
+      "timeToReadyMs": 280
     },
     {
       "id": "02",
-      "timeToReadyMs": 242
+      "timeToReadyMs": 244
     },
     {
       "id": "03",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 236
     },
     {
       "id": "04",
-      "timeToReadyMs": 242
+      "timeToReadyMs": 233
     },
     {
       "id": "05",
@@ -23,11 +23,11 @@
     },
     {
       "id": "06",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 234
     },
     {
       "id": "07",
-      "timeToReadyMs": 243
+      "timeToReadyMs": 242
     },
     {
       "id": "08",
@@ -35,11 +35,11 @@
     },
     {
       "id": "09",
-      "timeToReadyMs": 238
+      "timeToReadyMs": 237
     },
     {
       "id": "10",
-      "timeToReadyMs": 236
+      "timeToReadyMs": 235
     },
     {
       "id": "11",
@@ -47,40 +47,40 @@
     },
     {
       "id": "12",
-      "timeToReadyMs": 237
+      "timeToReadyMs": 232
     },
     {
       "id": "13",
-      "timeToReadyMs": 238
+      "timeToReadyMs": 234
     },
     {
       "id": "14",
-      "timeToReadyMs": 238
+      "timeToReadyMs": 231
     },
     {
       "id": "15",
-      "timeToReadyMs": 243
+      "timeToReadyMs": 240
     },
     {
       "id": "16",
-      "timeToReadyMs": 230
+      "timeToReadyMs": 235
     },
     {
       "id": "17",
-      "timeToReadyMs": 238
+      "timeToReadyMs": 236
     },
     {
       "id": "18",
-      "timeToReadyMs": 239
+      "timeToReadyMs": 235
     },
     {
       "id": "19",
-      "timeToReadyMs": 236
+      "timeToReadyMs": 237
     },
     {
       "id": "20",
-      "timeToReadyMs": 236
+      "timeToReadyMs": 231
     }
   ],
-  "fps": 60.22297432028045
+  "fps": 60.19601015160477
 }

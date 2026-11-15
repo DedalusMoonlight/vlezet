@@ -11,6 +11,7 @@ it("constructs complete stop-ordered layers for three dense known-solvable cases
     const input = parseProject(raw),
       placements = shelfLayout(input);
     expect(placements?.length).toBe(100);
+    if (!placements) throw new Error(`No shelf seed for fixture ${file}`);
     expect(validatePlan(input, placements).valid).toBe(true);
   }
 });

@@ -4,7 +4,7 @@ import { useProject } from "../project/store";
 import { usePlayback } from "../instructions/store";
 import { download } from "../import/download";
 export function ExportTools() {
-  const { input, currentSolution, restore } = useProject();
+  const { input, currentSolution, restore, status } = useProject();
   const [error, setError] = useState("");
   const [progress, setProgress] = useState("");
   const [includeSteps, setIncludeSteps] = useState(false);
@@ -57,7 +57,9 @@ export function ExportTools() {
       <button
         onClick={() =>
           download(
-            encodeProject(input, currentSolution),
+            encodeProject(input, currentSolution, {
+              cancelled: status === "cancelled",
+            }),
             "vlezet-project.json",
             "application/json",
           )
@@ -78,7 +80,7 @@ export function ExportTools() {
           try {
             if (f.size > 1024 * 1024) throw new Error("JSON больше 1 МиБ");
             const saved = decodeProject(new Uint8Array(await f.arrayBuffer()));
-            restore(saved.input, saved.solution);
+            restore(saved.input, saved.solution, saved.cancelled);
             usePlayback.getState().setPlayback(null);
             setError("");
           } catch (e) {
@@ -103,7 +105,9 @@ export function ExportTools() {
       </label>
       {progress && (
         <>
-          <span role="status">{progress}</span>
+          <span role="status" data-exporting="true">
+            {progress}
+          </span>
           <button onClick={() => abort.current?.abort()}>Отменить PDF</button>
         </>
       )}

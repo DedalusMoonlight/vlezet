@@ -156,7 +156,7 @@ export function LayoutEditor() {
         </button>
       </div>
       {draft && c && (
-        <div className="edit-panel">
+        <div className="edit-panel" data-unsaved={!!changed}>
           <h3>
             {c.name} · {selected}
           </h3>
