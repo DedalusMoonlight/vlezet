@@ -28,7 +28,7 @@ Node 24, JDK 21, Android SDK 36, SDK licenses согласно стандарт�
 npm ci
 npm run android:sync
 cd android
-./gradlew assembleDebug --no-daemon --max-workers=2
+./gradlew :app:assembleDebug --no-daemon --max-workers=2
 ```
 
 APK: `android/app/build/outputs/apk/debug/app-debug.apk`. Нативные ресурсы лежат в `android/`, web build отдельно в `dist-android/`; сервис-воркер в APK не регистрируется. Не добавляйте `server.url`: приложение должно открывать bundled assets. `app.vlezet.preview` — идентификатор тестовой установки. Версия CI: `0.1.<GITHUB_RUN_NUMBER>`.

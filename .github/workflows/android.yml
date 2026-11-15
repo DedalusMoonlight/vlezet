@@ -42,7 +42,7 @@ jobs:
           node -e 'const c=require("./android/app/src/main/assets/capacitor.config.json"); if(c.server?.url) process.exit(1)'
       - name: Assemble installable APK and instrumentation
         working-directory: android
-        run: ./gradlew assembleDebug assembleDebugAndroidTest --no-daemon --max-workers=2
+        run: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --max-workers=2
       - name: Verify APK signing and record build information
         shell: bash
         run: |
@@ -73,7 +73,7 @@ jobs:
           script: |
             adb shell svc wifi disable
             adb shell svc data disable
-            ./android/gradlew -p android connectedDebugAndroidTest --no-daemon --max-workers=2
+            ./android/gradlew -p android :app:connectedDebugAndroidTest --no-daemon --max-workers=2
             adb exec-out run-as app.vlezet.preview cat files/smoke.png > artifacts/android-smoke.png
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
