@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import { create } from "zustand";
 import {
   parseProject,
@@ -25,7 +26,7 @@ export const useProject = create<Store>((set) => ({
     set((s) =>
       projectReducer(s, {
         kind: "input",
-        input: parseProject({ ...input, revisionId: crypto.randomUUID() }),
+        input: parseProject({ ...input, revisionId: randomId() }),
       }),
     );
   },
@@ -47,7 +48,7 @@ export function startCalculation(input: ProjectInput, budgetMs = 5000): void {
     new URL("../../workers/packing.worker.ts", import.meta.url),
     { type: "module" },
   );
-  const jobId = crypto.randomUUID();
+  const jobId = randomId();
   const seed = (useProject.getState().currentSolution?.run.seed ?? 41) + 1;
   useProject.setState((s) => projectReducer(s, { kind: "start", jobId }));
   worker.onmessage = (e: MessageEvent<WorkerResponse>) =>

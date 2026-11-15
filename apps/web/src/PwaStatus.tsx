@@ -9,6 +9,7 @@ export function PwaStatus({ saveStatus }: { saveStatus: string }) {
   const [message, setMessage] = useState("");
   const running = useProject((s) => s.status === "running");
   useEffect(() => {
+    if (!window.isSecureContext) return;
     const reload = registerSW({
       onOfflineReady: () => setOffline(true),
       onNeedRefresh: () => setRefresh(true),
@@ -26,9 +27,11 @@ export function PwaStatus({ saveStatus }: { saveStatus: string }) {
       <span>
         {offline
           ? "Доступно офлайн"
-          : import.meta.env.DEV
-            ? "Режим разработки"
-            : "Готовим офлайн-кеш…"}
+          : !window.isSecureContext
+            ? "Просмотр по Wi-Fi · установка и офлайн доступны по HTTPS"
+            : import.meta.env.DEV
+              ? "Режим разработки"
+              : "Готовим офлайн-кеш…"}
       </span>
       {refresh && (
         <button

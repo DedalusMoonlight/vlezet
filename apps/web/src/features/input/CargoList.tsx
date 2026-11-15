@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import { useState } from "react";
 import type { CargoType } from "@vlezet/domain";
 import { useProject } from "../project/store";
@@ -87,7 +88,7 @@ export function CargoList() {
                       ...input.cargoTypes,
                       {
                         ...c,
-                        id: crypto.randomUUID(),
+                        id: randomId(),
                         name: c.name + " (копия)",
                       },
                     ]),

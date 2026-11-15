@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import { useState } from "react";
 import { cargoSchema, faces, type CargoType } from "@vlezet/domain";
 import { Measure } from "./Measure";
@@ -13,7 +14,7 @@ export function CargoEditor({
 }) {
   const [draft, setDraft] = useState<CargoType>(
     cargo ?? {
-      id: crypto.randomUUID(),
+      id: randomId(),
       name: "Новая коробка",
       lengthMm: 400,
       widthMm: 300,

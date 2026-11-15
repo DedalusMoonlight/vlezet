@@ -60,3 +60,20 @@ test("cancel remains explicit even when a partial result is available", async ({
   await page.reload();
   await expect(page.getByText("Расчёт отменён", { exact: true })).toBeVisible();
 });
+test("calculates when the secure-context UUID API is unavailable", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(crypto, "randomUUID", {
+      value: undefined,
+      configurable: true,
+    });
+  });
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Рассчитать загрузку", exact: true })
+    .click({ timeout: 3000 });
+  await expect(page.getByText("План готов", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "＋ Добавить груз" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+});

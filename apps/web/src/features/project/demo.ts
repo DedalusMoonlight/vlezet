@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import {
   reconcileInstances,
   faces,
@@ -48,7 +49,7 @@ export function demoProject(): ProjectInput {
   ];
   return {
     schemaVersion: 1,
-    revisionId: crypto.randomUUID(),
+    revisionId: randomId(),
     vehicle: {
       lengthMm: 2400,
       widthMm: 1600,

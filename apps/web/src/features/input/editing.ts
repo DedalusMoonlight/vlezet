@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import {
   parseProject,
   reconcileInstances,
@@ -26,6 +27,6 @@ export function splitRequired(
     ...input.cargoTypes.map((t) =>
       t.id === id ? { ...t, quantity: t.quantity - count } : t,
     ),
-    { ...c, id: crypto.randomUUID(), quantity: count, required: !c.required },
+    { ...c, id: randomId(), quantity: count, required: !c.required },
   ]);
 }

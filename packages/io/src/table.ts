@@ -1,3 +1,4 @@
+import { randomId } from "@vlezet/domain";
 import * as XLSX from "xlsx";
 import { boundedZip } from "./zip";
 import {
@@ -168,7 +169,7 @@ export function mapCargo(
     )
       issue("allowedDownFaces", "Грани: +X -X +Y -Y +Z -Z");
     const candidate = {
-      id: crypto.randomUUID(),
+      id: randomId(),
       name,
       lengthMm: measure("lengthMm", units.dimensions),
       widthMm: measure("widthMm", units.dimensions),
