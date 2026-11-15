@@ -1,0 +1,190 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Pro",
+  "node": "v24.22.3",
+  "budgetMs": 5000,
+  "seed": 42,
+  "rows": [
+    {
+      "id": "01",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5005.605667,
+      "attempts": 4,
+      "placedCount": 97,
+      "valid": false
+    },
+    {
+      "id": "02",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5006.308834,
+      "attempts": 4,
+      "placedCount": 97,
+      "valid": false
+    },
+    {
+      "id": "03",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5002.956582999999,
+      "attempts": 4,
+      "placedCount": 97,
+      "valid": false
+    },
+    {
+      "id": "04",
+      "kind": "floor",
+      "timeToFirstValidMs": 994.4629999999997,
+      "elapsedMs": 1107.4751670000005,
+      "attempts": 1,
+      "placedCount": 100,
+      "valid": true
+    },
+    {
+      "id": "05",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5005.416042000001,
+      "attempts": 4,
+      "placedCount": 84,
+      "valid": false
+    },
+    {
+      "id": "06",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5004.080083000001,
+      "attempts": 4,
+      "placedCount": 97,
+      "valid": false
+    },
+    {
+      "id": "07",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5091.849750000001,
+      "attempts": 4,
+      "placedCount": 89,
+      "valid": false
+    },
+    {
+      "id": "08",
+      "kind": "floor",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5002.336750000002,
+      "attempts": 4,
+      "placedCount": 88,
+      "valid": false
+    },
+    {
+      "id": "09",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5081.3738749999975,
+      "attempts": 1,
+      "placedCount": 52,
+      "valid": false
+    },
+    {
+      "id": "10",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5045.431749999996,
+      "attempts": 1,
+      "placedCount": 53,
+      "valid": false
+    },
+    {
+      "id": "11",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5030.052334,
+      "attempts": 1,
+      "placedCount": 44,
+      "valid": false
+    },
+    {
+      "id": "12",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5040.989042000001,
+      "attempts": 1,
+      "placedCount": 49,
+      "valid": false
+    },
+    {
+      "id": "13",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5044.034541000001,
+      "attempts": 1,
+      "placedCount": 51,
+      "valid": false
+    },
+    {
+      "id": "14",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5049.429499999991,
+      "attempts": 1,
+      "placedCount": 52,
+      "valid": false
+    },
+    {
+      "id": "15",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5048.980208000008,
+      "attempts": 1,
+      "placedCount": 41,
+      "valid": false
+    },
+    {
+      "id": "16",
+      "kind": "columns",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5061.306125000003,
+      "attempts": 1,
+      "placedCount": 54,
+      "valid": false
+    },
+    {
+      "id": "17",
+      "kind": "mixed",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5058.606375000003,
+      "attempts": 1,
+      "placedCount": 68,
+      "valid": false
+    },
+    {
+      "id": "18",
+      "kind": "mixed",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5056.385499999989,
+      "attempts": 1,
+      "placedCount": 67,
+      "valid": false
+    },
+    {
+      "id": "19",
+      "kind": "mixed",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5058.124333,
+      "attempts": 1,
+      "placedCount": 64,
+      "valid": false
+    },
+    {
+      "id": "20",
+      "kind": "mixed",
+      "timeToFirstValidMs": null,
+      "elapsedMs": 5067.062875000003,
+      "attempts": 1,
+      "placedCount": 62,
+      "valid": false
+    }
+  ]
+}

@@ -80,15 +80,17 @@ export default function App() {
               <p role="status">
                 {s.status === "running"
                   ? "Ищем раскладку…"
-                  : solution?.status === "ready"
-                    ? "План готов"
-                    : solution?.status === "proven-infeasible"
-                      ? "Обязательный груз не помещается"
-                      : solution
-                        ? "Часть груза не размещена"
-                        : s.status === "cancelled"
-                          ? "Расчёт отменён"
-                          : "Готово к расчёту"}
+                  : s.status === "cancelled"
+                    ? "Расчёт отменён"
+                    : solution?.status === "ready"
+                      ? "План готов"
+                      : solution?.status === "proven-infeasible"
+                        ? "Обязательный груз не помещается"
+                        : solution?.status === "not-found"
+                          ? "Вариант не найден"
+                          : solution
+                            ? "Часть груза не размещена"
+                            : "Готово к расчёту"}
               </p>
               {solution && (
                 <>

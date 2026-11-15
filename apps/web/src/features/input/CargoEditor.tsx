@@ -84,7 +84,11 @@ export function CargoEditor({
             {(["lengthMm", "widthMm", "heightMm"] as const).map((k, i) => (
               <Measure
                 key={k + unit}
-                label={["Длина", "Ширина", "Высота"][i] + ", " + unit}
+                label={
+                  ["Длина", "Ширина", "Высота"][i] +
+                  ", " +
+                  { mm: "мм", cm: "см", m: "м" }[unit]
+                }
                 value={draft[k]}
                 unit={unit}
                 onChange={(v) => patch({ [k]: v })}

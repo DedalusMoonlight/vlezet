@@ -1,0 +1,86 @@
+{
+  "project": "mobile",
+  "rows": [
+    {
+      "id": "01",
+      "timeToReadyMs": 255
+    },
+    {
+      "id": "02",
+      "timeToReadyMs": 242
+    },
+    {
+      "id": "03",
+      "timeToReadyMs": 237
+    },
+    {
+      "id": "04",
+      "timeToReadyMs": 242
+    },
+    {
+      "id": "05",
+      "timeToReadyMs": 230
+    },
+    {
+      "id": "06",
+      "timeToReadyMs": 237
+    },
+    {
+      "id": "07",
+      "timeToReadyMs": 243
+    },
+    {
+      "id": "08",
+      "timeToReadyMs": 231
+    },
+    {
+      "id": "09",
+      "timeToReadyMs": 238
+    },
+    {
+      "id": "10",
+      "timeToReadyMs": 236
+    },
+    {
+      "id": "11",
+      "timeToReadyMs": 235
+    },
+    {
+      "id": "12",
+      "timeToReadyMs": 237
+    },
+    {
+      "id": "13",
+      "timeToReadyMs": 238
+    },
+    {
+      "id": "14",
+      "timeToReadyMs": 238
+    },
+    {
+      "id": "15",
+      "timeToReadyMs": 243
+    },
+    {
+      "id": "16",
+      "timeToReadyMs": 230
+    },
+    {
+      "id": "17",
+      "timeToReadyMs": 238
+    },
+    {
+      "id": "18",
+      "timeToReadyMs": 239
+    },
+    {
+      "id": "19",
+      "timeToReadyMs": 236
+    },
+    {
+      "id": "20",
+      "timeToReadyMs": 236
+    }
+  ],
+  "fps": 60.22297432028045
+}

@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "createdAt": "2026-11-15",
+  "frozenBeforeMeasurement": true,
+  "cases": [
+    {
+      "id": "01",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/01.json"
+    },
+    {
+      "id": "02",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/02.json"
+    },
+    {
+      "id": "03",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/03.json"
+    },
+    {
+      "id": "04",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/04.json"
+    },
+    {
+      "id": "05",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/05.json"
+    },
+    {
+      "id": "06",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/06.json"
+    },
+    {
+      "id": "07",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/07.json"
+    },
+    {
+      "id": "08",
+      "kind": "floor",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/08.json"
+    },
+    {
+      "id": "09",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/09.json"
+    },
+    {
+      "id": "10",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/10.json"
+    },
+    {
+      "id": "11",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/11.json"
+    },
+    {
+      "id": "12",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/12.json"
+    },
+    {
+      "id": "13",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/13.json"
+    },
+    {
+      "id": "14",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/14.json"
+    },
+    {
+      "id": "15",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/15.json"
+    },
+    {
+      "id": "16",
+      "kind": "columns",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/16.json"
+    },
+    {
+      "id": "17",
+      "kind": "mixed",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/17.json"
+    },
+    {
+      "id": "18",
+      "kind": "mixed",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/18.json"
+    },
+    {
+      "id": "19",
+      "kind": "mixed",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/19.json"
+    },
+    {
+      "id": "20",
+      "kind": "mixed",
+      "knownSolvable": true,
+      "boxes": 100,
+      "types": 20,
+      "stops": 5,
+      "file": "cases/20.json"
+    }
+  ]
+}

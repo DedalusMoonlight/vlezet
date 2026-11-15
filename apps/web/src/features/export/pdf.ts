@@ -45,6 +45,8 @@ export async function exportPdf(
   };
   newPage();
   const line = (text: string, size = 10) => {
+    // Control characters from imported names must not enter PDF text operators.
+    // eslint-disable-next-line no-control-regex
     const cleaned = text.replace(/[\x00-\x1f]/g, " ");
     let current = "";
     for (const char of cleaned) {

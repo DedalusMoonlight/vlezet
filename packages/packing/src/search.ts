@@ -12,6 +12,7 @@ import {
   issue,
   type ValidationIssue,
 } from "../../validation/src";
+import { shelfLayout } from "./shelves";
 import { candidates } from "./candidates";
 import { orderedInstances } from "./orders";
 import { volume, score, better } from "./score";
@@ -66,7 +67,11 @@ export async function search(
           0,
         ),
       },
-      run: { seed: options.seed, algorithmVersion: "ep-support-v1", attempts },
+      run: {
+        seed: options.seed,
+        algorithmVersion: "shelves-ep-support-v2",
+        attempts,
+      },
     };
   };
   let best = makeSolution([], "not-found");
@@ -119,6 +124,19 @@ export async function search(
   if (proof.length) return makeSolution([], "proven-infeasible", proof);
   const stopped = () =>
     options.signal.aborted || performance.now() - start >= options.deadlineMs;
+  // Validate the constructive seed independently, just like every published result.
+  for (const yaw of [0, 1] as const) {
+    if (stopped() || options.maxAttempts === 0) break;
+    const shelves = shelfLayout(input, yaw);
+    if (shelves) {
+      const candidate = makeSolution(shelves);
+      if (candidate.report?.valid && candidate.status === "ready") {
+        candidate.run.attempts = 1;
+        emit({ kind: "best", solution: candidate });
+        return candidate;
+      }
+    }
+  }
   let checks = 0;
   for (
     let attempt = 0;

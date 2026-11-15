@@ -39,3 +39,16 @@ test("edits labelled faces, quantity, required units and zero top load on touch"
   ).toBeChecked();
   expect(errors).toEqual([]);
 });
+test("requires an explicit choice before rounding to millimetres", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "＋ Добавить груз" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("textbox", { name: /Длина,/ }).fill("40,55");
+  await expect(dialog.getByRole("button", { name: /Округлить/ })).toBeVisible();
+  await dialog.getByRole("button", { name: /Округлить/ }).click();
+  await expect(dialog.getByRole("textbox", { name: /Длина,/ })).toHaveValue(
+    "40.6",
+  );
+});

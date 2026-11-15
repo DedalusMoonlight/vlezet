@@ -10,7 +10,7 @@ const ws = XLSX.utils.aoa_to_sheet([
 ]);
 ws.E3 = { t: "n", v: 5, f: "2+3" };
 // BIFF8 token stream for 2+3; SheetJS CE writes .bf when producing XLS.
-Object.assign(ws.E3, {bf:[7,0,0x1e,2,0,0x1e,3,0,0x03]});
+Object.assign(ws.E3, { bf: [7, 0, 0x1e, 2, 0, 0x1e, 3, 0, 0x03] });
 XLSX.utils.book_append_sheet(wb, ws, "Грузы");
 XLSX.utils.book_append_sheet(
   wb,
