@@ -13,9 +13,9 @@
 
 | Среда на том же Mac | Полный план до 5 с | Время до готового экрана | Кадры при вращении 100 коробок |
 | --- | --- | --- | --- |
-| Chromium desktop | 20/20 | 133–245 мс | 60,2 FPS |
-| Chromium / Pixel 7 viewport | 20/20 | 230–255 мс | 60,2 FPS |
-| WebKit / iPhone 13 viewport | 20/20 | 217–303 мс | 60,3 FPS |
+| Chromium desktop | 20/20 | 227–271 мс | 60,2 FPS |
+| Chromium / Pixel 7 viewport | 20/20 | 230–280 мс | 60,2 FPS |
+| WebKit / iPhone 13 viewport | 20/20 | 216–290 мс | 60,3 FPS |
 
 `docs/benchmark-before.json`: исходный EP-поиск 1/20. `docs/benchmark-after.json`: с независимой проверкой нового начального варианта рядов/стопок 20/20. Браузерные сырые замеры: `docs/browser-performance-*.json`. Измерение FPS — частота requestAnimationFrame во время вращения сцены в headless браузере, не физический дисплей телефона. Для воспроизведения: `npm exec tsx scripts/benchmark.ts`; браузеры: `PW_PREVIEW=1 PW_BENCH=1 npm run test:e2e` после build.
 
