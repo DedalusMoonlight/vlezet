@@ -4,6 +4,8 @@
 
 ## Скачать и установить
 
+Проверенная сборка: [vlezet-android-3 / APK 0.1.3](https://github.com/DedalusMoonlight/vlezet/actions/runs/43765304161/artifacts/14181929206). [Результаты проверки](android-acceptance.md).
+
 1. Войти на GitHub под аккаунтом с доступом к `DedalusMoonlight/vlezet`.
 2. Открыть **Actions → Android APK → последний успешный запуск ветки feat/p0**.
 3. Внизу страницы, в **Artifacts**, скачать `vlezet-android-<номер>`.

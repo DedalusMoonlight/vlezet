@@ -22,23 +22,23 @@
 
 ## Task 1: Native shell and platform behavior
 Files: capacitor.config.ts, android/**, apps/web/vite.config.ts, apps/web/src/PwaStatus.tsx, apps/web/src/platform/**, package.json.
-- [ ] Add platform-mode tests and native build configuration checks, observe failing tests.
-- [ ] Install pinned Capacitor 8 packages and generate Android project. Bundle output to dist-android, disable PWA plugin there, configure min SDK/version and app icon/system insets.
-- [ ] Native status and snapshot limitation; test, typecheck and commit.
+- [x] Add platform-mode tests and native build configuration checks, observe failing tests.
+- [x] Install pinned Capacitor 8 packages and generate Android project. Bundle output to dist-android, disable PWA plugin there, configure min SDK/version and app icon/system insets.
+- [x] Native status and snapshot limitation; test, typecheck and commit.
 
 ## Task 2: Native file export
 Files: apps/web/src/features/import/download.ts and callers; apps/web/src/platform/exportFile.ts + tests.
-- [ ] Test native base64 file write/share sequencing and failure handling; RED.
-- [ ] Implement cache/filesystem/share adapter, await/catch in PDF, JSON, template and deletion-secret export. Browser path unchanged.
-- [ ] Run unit and browser checks, build native web bundle and cap sync, commit.
+- [x] Test native base64 file write/share sequencing and failure handling; RED.
+- [x] Implement cache/filesystem/share adapter, await/catch in PDF, JSON, template and deletion-secret export. Browser path unchanged.
+- [x] Run unit and browser checks, build native web bundle and cap sync, commit.
 
 ## Task 3: APK build and emulator verification
 Files: .github/workflows/android.yml, android/app/src/androidTest/**, docs/android.md, README.md.
-- [ ] Add Android instrumentation smoke: launch, bundled page, calculate, persisted reload/offline.
-- [ ] CI npm ci/checks/build:android + cap sync, JDK/SDK, cached debug keystore, assembleDebug, signature/manifest checks and install/emulator smoke.
-- [ ] Upload vlezet-debug APK, SHA256, build info; CI permissions contents:read, timeout/concurrency bounded. Only push/manual triggers.
-- [ ] Verify actual successful run and downloadable artifact. Document install/update/private-login instructions.
+- [x] Add Android instrumentation smoke: launch, bundled page, calculate, persisted reload/offline.
+- [x] CI npm ci/checks/build:android + cap sync, JDK/SDK, cached debug keystore, assembleDebug, signature/manifest checks and install/emulator smoke.
+- [x] Upload vlezet-preview.apk, SHA256, build info; CI permissions contents:read, timeout/concurrency bounded. Only push/manual triggers.
+- [x] Verify actual successful run and downloadable artifact. Document install/update/private-login instructions.
 
 ## Task 4: Final review and delivery
-- [ ] Independent review of Android delta, fix Important findings with regression tests.
-- [ ] Commit/push final code, verify final APK CI, give exact artifact/run link, state physical-phone limits.
+- [x] Independent review of Android delta, fix Important findings with regression tests.
+- [x] Commit/push final code, verify final APK CI, give exact artifact/run link, state physical-phone limits.
