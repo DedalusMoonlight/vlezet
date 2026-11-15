@@ -40,6 +40,11 @@ export const projectSchema = z
     }),
   })
   .superRefine((p, ctx) => {
+    if (p.instances.some((i) => i.id === "floor"))
+      ctx.addIssue({
+        code: "custom",
+        message: "ID floor зарезервирован для пола",
+      });
     const issue = (message: string) =>
       ctx.addIssue({ code: "custom", message });
     if (p.cargoTypes.reduce((n, c) => n + c.quantity, 0) > 300)

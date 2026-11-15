@@ -20,6 +20,11 @@ const project = () => ({
   settings: { wallGapMm: 10, horizontalGapMm: 5, supportModel: "support-v1" },
 });
 describe("input contract", () => {
+  it("rejects the reserved floor identifier in imported instances", () => {
+    const p = project();
+    p.instances[0].id = "floor";
+    expect(() => parseProject(p)).toThrow();
+  });
   it("makes all boxes required, all six faces allowed and top load unlimited", () => {
     const p = parseProject(project());
     expect(p.cargoTypes[0]).toMatchObject({
