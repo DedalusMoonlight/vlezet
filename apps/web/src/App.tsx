@@ -10,6 +10,7 @@ import { ResultView } from "./features/layout/ResultView";
 import { ExportTools } from "./features/export/ExportTools";
 import { useAutosave } from "./storage/useAutosave";
 import { PwaStatus } from "./PwaStatus";
+import { ShareDialog } from "./features/share/ShareDialog";
 export default function App() {
   const s = useProject();
   const saved = useAutosave();
@@ -56,6 +57,7 @@ export default function App() {
         <div className="toolbar">
           <ImportWizard />
           <ExportTools />
+          <ShareDialog />
         </div>
         <div className="workspace">
           <div className="input-column">
