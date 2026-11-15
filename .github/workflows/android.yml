@@ -128,7 +128,7 @@ jobs:
           export VLEZET_VERSION="$version"
           envsubst '${VLEZET_VERSION}' < .github/release-notes.md > /tmp/vlezet-release-notes.md
           gh release create "v$version" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --title "Влезет $version — Android Preview" --prerelease \
+            --title "Влезет $version для Android" --prerelease \
             --notes-file /tmp/vlezet-release-notes.md \
             "artifacts/$apk" artifacts/SHA256SUMS artifacts/android-smoke.png \
             artifacts/build-info.txt artifacts/manifest.txt artifacts/signature.txt
