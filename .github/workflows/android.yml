@@ -24,11 +24,6 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - name: Restore preview signing identity
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/debug.keystore
-          key: android-preview-debug-key-v1
       - run: npm ci
       - run: npm run typecheck && npm run lint && npm test
       - run: npm run android:sync
@@ -93,3 +88,47 @@ jobs:
             android/app/build/outputs/androidTest-results/
           retention-days: 14
           if-no-files-found: ignore
+  release:
+    needs: apk
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: vlezet-android-${{ github.run_number }}
+          path: artifacts
+      - name: Remove the former private-repository signing cache
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh cache list --repo "$GITHUB_REPOSITORY" --key android-preview-debug-key-v1 --limit 100 --json id,key \
+            --jq '.[] | select(.key == "android-preview-debug-key-v1") | .id' > /tmp/vlezet-signing-cache-ids
+          while read -r cache_id; do
+            gh cache delete "$cache_id" --repo "$GITHUB_REPOSITORY"
+          done < /tmp/vlezet-signing-cache-ids
+      - name: Publish versioned Android preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          (cd artifacts && sha256sum --check SHA256SUMS)
+          version="0.1.${GITHUB_RUN_NUMBER}"
+          grep -F "versionName='$version'" artifacts/manifest.txt
+          grep -Fx "Commit: $GITHUB_SHA" artifacts/build-info.txt
+          test -s artifacts/android-smoke.png
+          apk="vlezet-${version}-android.apk"
+          mv artifacts/vlezet-preview.apk "artifacts/$apk"
+          (cd artifacts && sha256sum "$apk" > SHA256SUMS)
+          export VLEZET_VERSION="$version"
+          envsubst '${VLEZET_VERSION}' < .github/release-notes.md > /tmp/vlezet-release-notes.md
+          gh release create "v$version" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Влезет $version — Android Preview" --prerelease \
+            --notes-file /tmp/vlezet-release-notes.md \
+            "artifacts/$apk" artifacts/SHA256SUMS artifacts/android-smoke.png \
+            artifacts/build-info.txt artifacts/manifest.txt artifacts/signature.txt

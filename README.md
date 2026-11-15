@@ -1,10 +1,16 @@
 # Влезет. Покажем, как
 
-PWA для планирования загрузки машины: прямоугольный кузов, коробки и остановки → проверенная раскладка и пошаговая 3D-инструкция. Работает на устройстве, без регистрации, офлайн после первого открытия.
+Планировщик загрузки машины: размеры кузова, коробки и остановки → проверенная раскладка и пошаговая 3D-инструкция. Для переездов, доставки и малого бизнеса. Расчёт работает на устройстве, без регистрации.
+
+[![Скачать для Android](https://img.shields.io/badge/Скачать_для_Android-GitHub_Releases-3c7052?style=for-the-badge&logo=android&logoColor=white)](https://github.com/DedalusMoonlight/vlezet/releases)
+
+**[Скачать APK и выбрать версию →](https://github.com/DedalusMoonlight/vlezet/releases)**
 
 ## Android
 
-Устанавливаемая тестовая версия: **GitHub Actions → Android APK → успешный запуск → Artifacts**. Скачайте ZIP и установите `vlezet-preview.apk`. [Подробная инструкция](docs/android.md).
+Откройте [Releases](https://github.com/DedalusMoonlight/vlezet/releases), выберите версию и скачайте файл **`vlezet-<версия>-android.apk`**. Откройте его на телефоне и разрешите установку из этого источника. Android 8+ с актуальным System WebView. Интернет и Mac для работы не нужны.
+
+Это preview: перед обновлением сохраните JSON-копию проекта, поскольку подпись новой сборки может потребовать переустановку. [Подробная инструкция](docs/android.md). Веб-версия также доступна как PWA при самостоятельном размещении.
 
 ## Быстрый старт
 
@@ -41,4 +47,4 @@ Production PWA: `npm run build`, затем `npm run preview`. Сервис-во
 
 `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`. Браузеры: `npx playwright install chromium webkit`; затем `PW_PREVIEW=1 npm run test:e2e` после сборки. Полный benchmark: `PW_PREVIEW=1 PW_BENCH=1 npm run test:e2e`.
 
-Проверки на реальных iPhone/Android и внешнее размещение ещё не выполнены. Эмуляция браузеров не заменяет проверку устройств. Репозиторий приватный; лицензия проекта пока не выбрана. Лицензия встроенного Noto Sans находится рядом со шрифтом.
+Android APK проверяется в Android 15 emulator, веб-версия — в Chromium и WebKit. Проверки на физических телефонах и внешнее размещение PWA ещё не выполнены. Лицензия проекта пока не выбрана; доступность исходников не означает предоставления open-source лицензии. Лицензия встроенного Noto Sans находится рядом со шрифтом.
