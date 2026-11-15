@@ -6,6 +6,7 @@ import {
 import { ImportWizard } from "./features/import/ImportWizard";
 import { VehicleForm } from "./features/input/VehicleForm";
 import { CargoList } from "./features/input/CargoList";
+import { LayoutEditor } from "./features/layout/LayoutEditor";
 export default function App() {
   const s = useProject();
   const solution = s.currentSolution;
@@ -64,11 +65,7 @@ export default function App() {
                   остановки
                 </span>
               </div>
-              <div className="scene-placeholder">
-                <span>▱</span>
-                <h3>Здесь всё встанет на места</h3>
-                <p>Рассчитайте первый вариант загрузки</p>
-              </div>
+              <LayoutEditor key={s.input.revisionId} />
               <p role="status">
                 {s.status === "running"
                   ? "Ищем раскладку…"
