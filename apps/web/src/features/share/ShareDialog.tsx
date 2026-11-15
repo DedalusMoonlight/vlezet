@@ -1,3 +1,4 @@
+import { nativeApp } from "../../platform/runtime";
 import { useState } from "react";
 import { useProject } from "../project/store";
 import { db } from "../../storage/db";
@@ -27,6 +28,7 @@ export function ShareDialog() {
     }
   };
   const publish = async () => {
+    if (nativeApp()) return;
     if (
       !currentSolution ||
       currentSolution.status !== "ready" ||
@@ -96,6 +98,12 @@ export function ShareDialog() {
                 ×
               </button>
             </div>
+            {nativeApp() && (
+              <p role="status">
+                Обмен по ссылке появится после подключения сервера. Сейчас
+                сохраните JSON и отправьте файл получателю.
+              </p>
+            )}
             <p>
               Снимок доступен любому, у кого есть ссылка, 30 дней. В него входят
               названия, размеры груза и раскладка. Изменения вашего проекта не
@@ -111,7 +119,12 @@ export function ShareDialog() {
             </label>
             <button
               className="primary"
-              disabled={!agree || busy || currentSolution?.status !== "ready"}
+              disabled={
+                nativeApp() ||
+                !agree ||
+                busy ||
+                currentSolution?.status !== "ready"
+              }
               onClick={() => void publish()}
             >
               {busy ? "Создаём…" : "Создать ссылку"}
@@ -156,6 +169,10 @@ export function ShareDialog() {
                         ),
                         "vlezet-delete-secret.json",
                         "application/json",
+                      ).catch((e) =>
+                        setError(
+                          e instanceof Error ? e.message : "Ошибка экспорта",
+                        ),
                       )
                     }
                   >

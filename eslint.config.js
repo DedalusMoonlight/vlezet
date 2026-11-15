@@ -8,6 +8,8 @@ export default tseslint.config(
       ".tooling/**",
       ".superpowers/**",
       "dist/**",
+      "dist-android/**",
+      "android/**",
       "test-results/**",
       "playwright-report/**",
     ],

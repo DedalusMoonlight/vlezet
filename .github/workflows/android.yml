@@ -1,0 +1,95 @@
+name: Android APK
+on:
+  push:
+    branches: [main, feat/p0]
+    paths-ignore: ["docs/**", "*.md"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Restore preview signing identity
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: android-preview-debug-key-v1
+      - run: npm ci
+      - run: npm run typecheck && npm run lint && npm test
+      - run: npm run android:sync
+      - name: Check bundled offline assets
+        run: |
+          test -f dist-android/fonts/NotoSans.ttf
+          test ! -f dist-android/sw.js
+          test ! -f dist-android/manifest.webmanifest
+          test -n "$(find dist-android/assets -name 'packing.worker-*.js')"
+          test -n "$(find dist-android/assets -name 'import.worker-*.js')"
+          node -e 'const c=require("./android/app/src/main/assets/capacitor.config.json"); if(c.server?.url) process.exit(1)'
+      - name: Assemble installable APK and instrumentation
+        working-directory: android
+        run: ./gradlew assembleDebug assembleDebugAndroidTest --no-daemon --max-workers=2
+      - name: Verify APK signing and record build information
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          cp android/app/build/outputs/apk/debug/app-debug.apk artifacts/vlezet-preview.apk
+          build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          "$build_tools/apksigner" verify --verbose --print-certs artifacts/vlezet-preview.apk > artifacts/signature.txt
+          "$build_tools/aapt" dump badging artifacts/vlezet-preview.apk > artifacts/manifest.txt
+          (cd artifacts && sha256sum vlezet-preview.apk > SHA256SUMS)
+          printf 'Commit: %s\nRun: %s\nPackage: app.vlezet.preview\nBuild: debug preview, not a store release\n' "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" > artifacts/build-info.txt
+      - name: Enable KVM for the disposable emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install and test offline on Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          ram-size: 2048M
+          heap-size: 512M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            adb shell svc wifi disable
+            adb shell svc data disable
+            ./android/gradlew -p android connectedDebugAndroidTest --no-daemon --max-workers=2
+            adb exec-out run-as app.vlezet.preview cat files/smoke.png > artifacts/android-smoke.png
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: vlezet-android-${{ github.run_number }}
+          path: artifacts/
+          retention-days: 30
+          if-no-files-found: error
+          compression-level: 0
+      - name: Upload Android test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-test-reports-${{ github.run_number }}
+          path: |
+            android/app/build/reports/androidTests/
+            android/app/build/outputs/androidTest-results/
+          retention-days: 14
+          if-no-files-found: ignore

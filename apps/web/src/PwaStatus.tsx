@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { registerSW } from "virtual:pwa-register";
+import { nativeApp } from "./platform/runtime";
 import { useProject } from "./features/project/store";
 import { updateBlocker } from "./updateGuard";
 export function PwaStatus({ saveStatus }: { saveStatus: string }) {
@@ -9,19 +9,32 @@ export function PwaStatus({ saveStatus }: { saveStatus: string }) {
   const [message, setMessage] = useState("");
   const running = useProject((s) => s.status === "running");
   useEffect(() => {
-    if (!window.isSecureContext) return;
-    const reload = registerSW({
-      onOfflineReady: () => setOffline(true),
-      onNeedRefresh: () => setRefresh(true),
-      onRegisteredSW: () => {
-        void navigator.serviceWorker.ready.then(() => setOffline(true));
-      },
-      onRegisterError: () => setMessage("Офлайн-кеш пока недоступен"),
-    });
-    setUpdate(() => () => {
-      void reload(true);
+    if (
+      nativeApp() ||
+      !window.isSecureContext ||
+      import.meta.env.MODE === "android"
+    )
+      return;
+    void import("virtual:pwa-register").then(({ registerSW }) => {
+      const reload = registerSW({
+        onOfflineReady: () => setOffline(true),
+        onNeedRefresh: () => setRefresh(true),
+        onRegisteredSW: () => {
+          void navigator.serviceWorker.ready.then(() => setOffline(true));
+        },
+        onRegisterError: () => setMessage("Офлайн-кеш пока недоступен"),
+      });
+      setUpdate(() => () => {
+        void reload(true);
+      });
     });
   }, []);
+  if (nativeApp())
+    return (
+      <div className="pwa-status">
+        Android · Работает офлайн · Обновления — установкой нового APK
+      </div>
+    );
   return (
     <div className="pwa-status">
       <span>

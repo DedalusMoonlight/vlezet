@@ -1,3 +1,4 @@
+import { nativeApp } from "../../platform/runtime";
 import { parseProject } from "@vlezet/domain";
 import { restoreSolution } from "@vlezet/io";
 import type { Solution } from "@vlezet/packing";
@@ -8,6 +9,10 @@ export type SharedSnapshot = {
   solution: Solution;
 };
 async function request(path: string, init?: RequestInit) {
+  if (nativeApp())
+    throw new Error(
+      "Сервис ссылок пока не подключён. Используйте обмен JSON-файлом.",
+    );
   const r = await fetch(path, { ...init, signal: AbortSignal.timeout(15000) });
   if (!r.ok) {
     let error = "Сервис снимков недоступен";

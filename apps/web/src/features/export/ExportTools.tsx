@@ -45,7 +45,7 @@ export function ExportTools() {
           );
         },
       );
-      download(bytes, "vlezet-plan.pdf", "application/pdf");
+      await download(bytes, "vlezet-plan.pdf", "application/pdf");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Ошибка экспорта");
     } finally {
@@ -62,6 +62,8 @@ export function ExportTools() {
             }),
             "vlezet-project.json",
             "application/json",
+          ).catch((e) =>
+            setError(e instanceof Error ? e.message : "Ошибка экспорта"),
           )
         }
       >

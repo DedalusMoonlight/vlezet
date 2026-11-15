@@ -16,12 +16,15 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "preview": "vite preview --config apps/web/vite.config.ts"
+    "preview": "vite preview --config apps/web/vite.config.ts",
+    "build:android": "vite build --config apps/web/vite.config.ts --mode android",
+    "android:sync": "npm run build:android && cap sync android"
   },
   "engines": {
     "node": ">=24 <25"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.6.2",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.65.1",
     "@types/better-sqlite3": "9.6.0",
@@ -42,6 +45,10 @@
     "vitest": "5.1.0"
   },
   "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/filesystem": "8.1.2",
+    "@capacitor/share": "8.0.3",
     "@fastify/rate-limit": "11.2.2",
     "@pdf-lib/fontkit": "1.1.1",
     "@radix-ui/react-dialog": "1.3.1",

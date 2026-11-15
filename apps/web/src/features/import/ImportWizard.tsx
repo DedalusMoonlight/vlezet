@@ -161,7 +161,15 @@ export function ImportWizard() {
               />
             </label>
             <button
-              onClick={() => download(templateXlsx(), "vlezet-template.xlsx")}
+              onClick={() =>
+                void download(
+                  templateXlsx(),
+                  "vlezet-template.xlsx",
+                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ).catch((e) =>
+                  setError(e instanceof Error ? e.message : "Ошибка экспорта"),
+                )
+              }
             >
               Скачать шаблон XLSX
             </button>
