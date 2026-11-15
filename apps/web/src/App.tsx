@@ -7,8 +7,18 @@ import { ImportWizard } from "./features/import/ImportWizard";
 import { VehicleForm } from "./features/input/VehicleForm";
 import { CargoList } from "./features/input/CargoList";
 import { ResultView } from "./features/layout/ResultView";
+import { ExportTools } from "./features/export/ExportTools";
+import { useAutosave } from "./storage/useAutosave";
+import { PwaStatus } from "./PwaStatus";
 export default function App() {
   const s = useProject();
+  const saved = useAutosave();
+  if (!saved.ready)
+    return (
+      <main>
+        <p role="status">Открываем проект…</p>
+      </main>
+    );
   const solution = s.currentSolution;
   return (
     <>
@@ -39,18 +49,17 @@ export default function App() {
             <span>коробок в вашем рейсе</span>
           </div>
         </div>
+        <div className="save-status" role="status">
+          {saved.status}
+        </div>
+        <PwaStatus />
         <div className="toolbar">
           <ImportWizard />
+          <ExportTools />
         </div>
         <div className="workspace">
           <div className="input-column">
-            <VehicleForm
-              key={
-                s.input.revisionId.startsWith("restored")
-                  ? s.input.revisionId
-                  : "vehicle"
-              }
-            />
+            <VehicleForm key={JSON.stringify(s.input.vehicle)} />
             <CargoList />
           </div>
           <section className="result-column">

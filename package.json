@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "preview": "vite preview --config apps/web/vite.config.ts"
   },
   "engines": {
     "node": ">=24 <25"

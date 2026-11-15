@@ -6,7 +6,7 @@ test("calculates a plan on the device without freezing controls", async ({
   await page
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
-  await expect(page.getByRole("status")).toHaveText("План готов", {
+  await expect(page.getByRole("status").filter({hasText:"План готов"})).toHaveText("План готов", {
     timeout: 15000,
   });
   await expect(page.getByText("Размещено: 18 из 18")).toBeVisible();

@@ -1,0 +1,3 @@
+Noto Sans Regular (static TrueType), SIL Open Font License 1.1.
+Source: https://github.com/notofonts/noto-fonts/blob/main/hinted/ttf/NotoSans/NotoSans-Regular.ttf
+License: OFL.txt. Downloaded 2026-11-15. Static font used for reliable PDF subsetting.
