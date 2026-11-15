@@ -1,0 +1,11 @@
+node_modules/
+.cache/
+.tooling/
+.superpowers/
+dist/
+coverage/
+test-results/
+playwright-report/
+.env
+*.sqlite*
+.DS_Store
