@@ -6,7 +6,7 @@ import {
 import { ImportWizard } from "./features/import/ImportWizard";
 import { VehicleForm } from "./features/input/VehicleForm";
 import { CargoList } from "./features/input/CargoList";
-import { LayoutEditor } from "./features/layout/LayoutEditor";
+import { ResultView } from "./features/layout/ResultView";
 export default function App() {
   const s = useProject();
   const solution = s.currentSolution;
@@ -65,7 +65,7 @@ export default function App() {
                   остановки
                 </span>
               </div>
-              <LayoutEditor key={s.input.revisionId} />
+              <ResultView key={s.input.revisionId} />
               <p role="status">
                 {s.status === "running"
                   ? "Ищем раскладку…"
