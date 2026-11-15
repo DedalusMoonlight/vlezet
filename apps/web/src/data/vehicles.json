@@ -1,0 +1,54 @@
+[
+  {
+    "id": "custom-l1",
+    "name": "Ford Transit Custom L1 H1 · 2023",
+    "lengthMm": 2394,
+    "widthMm": 1392,
+    "heightMm": 1295,
+    "source": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/price-list/commercial-vehicles/PL-New_Transit_Custom-20_January_2023.pdf",
+    "additionalSource": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/brochures/commercial-vehicles/BRO-New_Transit_Custom.pdf",
+    "checkedAt": "2026-11-15",
+    "note": "Длина по верхней части перегородки; ширина между арками; высота ограничена задним проёмом из брошюры этой версии."
+  },
+  {
+    "id": "custom-l2",
+    "name": "Ford Transit Custom L2 H1 · 2023",
+    "lengthMm": 2794,
+    "widthMm": 1392,
+    "heightMm": 1295,
+    "source": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/price-list/commercial-vehicles/PL-New_Transit_Custom-20_January_2023.pdf",
+    "additionalSource": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/brochures/commercial-vehicles/BRO-New_Transit_Custom.pdf",
+    "checkedAt": "2026-11-15",
+    "note": "Длина по верхней части перегородки; ширина между арками; высота заднего проёма."
+  },
+  {
+    "id": "connect-swb",
+    "name": "Ford Transit Connect PHEV Van SWB",
+    "lengthMm": 1626,
+    "widthMm": 1230,
+    "heightMm": 1122,
+    "source": "https://www.ford.co.uk/support/how-tos/electric-vehicles/hybrid-hybrid-plug-in/ford-transit-and-tourneo-connect-phev",
+    "checkedAt": "2026-11-15",
+    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van SWB, не Tourneo."
+  },
+  {
+    "id": "connect-lwb",
+    "name": "Ford Transit Connect PHEV Van LWB",
+    "lengthMm": 1979,
+    "widthMm": 1230,
+    "heightMm": 1122,
+    "source": "https://www.ford.co.uk/support/how-tos/electric-vehicles/hybrid-hybrid-plug-in/ford-transit-and-tourneo-connect-phev",
+    "checkedAt": "2026-11-15",
+    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van LWB."
+  },
+  {
+    "id": "courier",
+    "name": "Ford Transit Courier · 2024",
+    "lengthMm": 1802,
+    "widthMm": 1220,
+    "heightMm": 1120,
+    "source": "https://media.ford.com/content/dam/fordmedia/Europe/en/2024/01/2024_TRANSIT_COURIER_TECHNICAL_SPECIFICATION_EU.pdf",
+    "checkedAt": "2026-11-15",
+    "note": "Длина без люка; ширина между арками; высота ограничена задним проёмом. Проверьте выступы перегородки по всей высоте."
+  }
+]

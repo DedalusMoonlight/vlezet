@@ -11,7 +11,13 @@
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "types": ["node", "vite/client"]
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@vlezet/domain": ["./packages/domain/src/index.ts"],
+      "@vlezet/validation": ["./packages/validation/src/index.ts"],
+      "@vlezet/packing": ["./packages/packing/src/index.ts"],
+      "@vlezet/io": ["./packages/io/src/index.ts"]
+    }
   },
   "include": ["apps", "packages", "fixtures", "tests", "*.ts", "scripts"]
 }

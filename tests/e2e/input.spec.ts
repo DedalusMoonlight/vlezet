@@ -1,0 +1,41 @@
+import { test, expect } from "@playwright/test";
+test("edits labelled faces, quantity, required units and zero top load on touch", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await page.getByRole("button", { name: "＋ Добавить груз" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Название", { exact: true }).fill("Хрупкий прибор");
+  await dialog.getByLabel("Количество", { exact: true }).fill("3");
+  for (const name of ["Перед +X", "Зад -X", "Справа +Y", "Слева -Y", "Верх +Z"])
+    await dialog.getByRole("button", { name, exact: true }).click();
+  await dialog.getByRole("button", { name: "Низ -Z", exact: true }).click();
+  await expect(
+    dialog.getByRole("button", { name: "Низ -Z", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await dialog.getByLabel("Ограничить массу сверху").check();
+  await expect(
+    dialog.getByLabel("Максимальная масса сверху, кг (0 — ничего)"),
+  ).toHaveValue("0");
+  await dialog.getByRole("button", { name: "Сохранить груз" }).click();
+  const row = page
+    .locator("article")
+    .filter({ has: page.getByRole("button", { name: /Хрупкий прибор.*см/ }) });
+  await expect(row).toContainText("× 3");
+  await row
+    .getByRole("button", { name: "1 шт. сделать необязательной", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Обязательный: Хрупкий прибор").last(),
+  ).not.toBeChecked();
+  await page
+    .getByLabel("Дублировать Хрупкий прибор", { exact: true })
+    .first()
+    .click();
+  await expect(
+    page.getByLabel("Обязательный: Хрупкий прибор (копия)", { exact: true }),
+  ).toBeChecked();
+  expect(errors).toEqual([]);
+});

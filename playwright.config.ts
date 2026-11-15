@@ -6,8 +6,8 @@ export default defineConfig({
   timeout: 30000,
   use: { baseURL: "http://127.0.0.1:5173", trace: "retain-on-failure" },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["Pixel 7"] } },
+    { name: "chromium", use: { ...devices["Desktop Chrome"], channel:"chromium" } },
+    { name: "mobile", use: { ...devices["Pixel 7"], channel:"chromium" } },
     { name: "webkit", use: { ...devices["iPhone 13"] } },
   ],
   webServer: {
