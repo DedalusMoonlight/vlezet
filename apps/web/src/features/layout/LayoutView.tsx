@@ -15,6 +15,7 @@ export function LayoutView() {
   const stops = [...new Set(input.cargoTypes.map((c) => c.stop))].sort(
     (a, b) => a - b,
   );
+  const placedIds = new Set(s.placements.map((p) => p.instanceId));
   return (
     <>
       <CargoScene
@@ -61,16 +62,44 @@ export function LayoutView() {
         </div>
       </div>
       {s.unplacedIds.length > 0 && (
-        <details>
-          <summary>Не размещено: {s.unplacedIds.length}</summary>
-          {s.unplacedIds.map((id) => (
-            <p key={id}>{boxLabel(id)}</p>
-          ))}
-          <p className="hint">
-            Поиск не доказывает невозможность размещения. Можно увеличить кузов
-            или продолжить расчёт.
-          </p>
-        </details>
+        <>
+          <section className="cargo-outcomes" aria-label="Что вошло в план">
+            <h3>Что вошло в план</h3>
+            {input.cargoTypes.map((cargo) => {
+              const count = input.instances.filter(
+                (i) => i.typeId === cargo.id && placedIds.has(i.id),
+              ).length;
+              return (
+                <article key={cargo.id}>
+                  <strong>{cargo.name}</strong>
+                  <small>
+                    Точка {cargo.stop} ·{" "}
+                    {cargo.required ? "Обязательный" : "Необязательный"}
+                  </small>
+                  <p>
+                    Размещено {count} из {cargo.quantity}
+                    {count < cargo.quantity && (
+                      <span className="unplaced-count">
+                        {" "}
+                        · Осталось {cargo.quantity - count}
+                      </span>
+                    )}
+                  </p>
+                </article>
+              );
+            })}
+          </section>
+          <details>
+            <summary>Не размещено: {s.unplacedIds.length}</summary>
+            {s.unplacedIds.map((id) => (
+              <p key={id}>{boxLabel(id)}</p>
+            ))}
+            <p className="hint">
+              Поиск не доказывает невозможность размещения. Можно увеличить
+              кузов или продолжить расчёт.
+            </p>
+          </details>
+        </>
       )}
     </>
   );

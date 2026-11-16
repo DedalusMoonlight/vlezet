@@ -13,6 +13,7 @@ import { ExportTools } from "./features/export/ExportTools";
 import { useAutosave } from "./storage/useAutosave";
 import { PwaStatus } from "./PwaStatus";
 import { ShareDialog } from "./features/share/ShareDialog";
+import { ProjectActions } from "./features/project/ProjectActions";
 
 export default function App() {
   const s = useProject();
@@ -34,8 +35,9 @@ export default function App() {
     setAppliedOrder("");
     startCalculation(s.input, budget);
   };
-  const status =
-    s.status === "running"
+  const status = !s.input.instances.length
+    ? "Добавьте груз для расчёта"
+    : s.status === "running"
       ? s.checkingStops
         ? "Проверяем другой порядок остановок…"
         : "Ищем раскладку…"
@@ -85,6 +87,13 @@ export default function App() {
             ) / 1000}{" "}
             кг
           </span>
+          <ProjectActions
+            onChanged={(hasPlan) => {
+              setSection(hasPlan ? "plan" : "cargo");
+              setAppliedOrder("");
+              if (fileMenu.current) fileMenu.current.open = false;
+            }}
+          />
         </div>
         <nav className="section-nav" aria-label="Разделы проекта">
           {[
@@ -130,7 +139,7 @@ export default function App() {
               data-active={section === "vehicle"}
             >
               <VehicleForm
-                key={JSON.stringify(s.input.vehicle)}
+                key={`${s.projectEpoch}:${JSON.stringify(s.input.vehicle)}`}
                 onDirtyChange={setVehicleBlocked}
               />
               <button
@@ -145,7 +154,7 @@ export default function App() {
               data-section="cargo"
               data-active={section === "cargo"}
             >
-              <CargoList />
+              <CargoList key={s.projectEpoch} />
             </div>
           </div>
           <section

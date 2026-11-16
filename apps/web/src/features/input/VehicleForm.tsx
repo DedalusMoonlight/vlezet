@@ -10,15 +10,22 @@ export function VehicleForm({
 }) {
   const [validity, setValidity] = useState<Record<string, boolean>>({});
   const { input, setInput } = useProject();
-  const [preset, setPreset] = useState("");
+  const [preset, setPreset] = useState(
+    vehicles.some((v) => v.id === input.vehicle.presetId)
+      ? input.vehicle.presetId!
+      : "",
+  );
   const [draft, setDraft] = useState<Vehicle>(input.vehicle);
   const [confirmed, setConfirmed] = useState(true);
   const [error, setError] = useState("");
   const [key, setKey] = useState(0);
   const v = vehicles.find((x) => x.id === preset);
-  const complete = Object.values(draft).every(
-    (n) => Number.isSafeInteger(n) && n > 0,
-  );
+  const complete = [
+    draft.lengthMm,
+    draft.widthMm,
+    draft.heightMm,
+    draft.payloadG,
+  ].every((n) => Number.isSafeInteger(n) && n > 0);
   const dirty =
     JSON.stringify(draft) !== JSON.stringify(input.vehicle) ||
     !complete ||
@@ -61,6 +68,7 @@ export function VehicleForm({
               const p = vehicles.find((x) => x.id === e.target.value);
               if (p) {
                 setDraft({
+                  presetId: p.id,
                   lengthMm: p.lengthMm ?? 0,
                   widthMm: p.widthMm ?? 0,
                   heightMm: p.heightMm ?? 0,
@@ -77,6 +85,10 @@ export function VehicleForm({
                 }));
                 setConfirmed(false);
                 setError("");
+              } else {
+                setDraft(
+                  ({ presetId: _presetId, ...dimensions }) => dimensions,
+                );
               }
             }}
           >

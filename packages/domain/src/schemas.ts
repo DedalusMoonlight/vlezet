@@ -26,6 +26,7 @@ export const projectSchema = z
     schemaVersion: z.literal(1),
     revisionId: id,
     vehicle: z.object({
+      presetId: id.optional(),
       lengthMm: size,
       widthMm: size,
       heightMm: size,

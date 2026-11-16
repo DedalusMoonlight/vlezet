@@ -14,6 +14,7 @@ import { demoProject } from "./demo";
 import type { WorkerResponse } from "../../workers/protocol";
 let worker: Worker | null = null;
 type Store = ProjectState & {
+  projectEpoch: number;
   setInput: (input: ProjectInput) => void;
   setSolution: (solution: Solution) => void;
   restore: (
@@ -24,6 +25,7 @@ type Store = ProjectState & {
 };
 export const useProject = create<Store>((set) => ({
   ...createState(demoProject()),
+  projectEpoch: 0,
   setInput: (input) => {
     worker?.terminate();
     worker = null;
@@ -39,11 +41,12 @@ export const useProject = create<Store>((set) => ({
   restore: (input, solution, cancelled = false) => {
     worker?.terminate();
     worker = null;
-    set({
+    set((s) => ({
       ...createState(parseProject(input)),
+      projectEpoch: s.projectEpoch + 1,
       currentSolution: solution,
       status: cancelled ? "cancelled" : solution ? "done" : "idle",
-    });
+    }));
   },
 }));
 export function startCalculation(input: ProjectInput, budgetMs = 5000): void {

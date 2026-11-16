@@ -71,6 +71,15 @@ export function CargoList() {
             </label>
             <button className="cargo-title" onClick={() => setEditing(c)}>
               <strong>{c.name}</strong>
+              <small
+                className={
+                  c.required
+                    ? "cargo-requirement required"
+                    : "cargo-requirement"
+                }
+              >
+                {c.required ? "Обязательный" : "Необязательный"}
+              </small>
               <small>
                 {c.lengthMm / 10} × {c.widthMm / 10} × {c.heightMm / 10} см ·{" "}
                 {c.massG / 1000} кг × {c.quantity}

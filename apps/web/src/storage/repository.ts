@@ -22,24 +22,42 @@ export type SavedProject = {
   stale: boolean;
   cancelled: boolean;
 };
+export type ProjectSnapshot = Pick<
+  SavedProject,
+  "input" | "solution" | "playback" | "cancelled"
+>;
+function storedProject(
+  id: string,
+  { input, solution, playback, cancelled }: ProjectSnapshot,
+): StoredProject {
+  return {
+    id,
+    version: 1,
+    bytes: encodeProject(input, solution, { cancelled }),
+    playback: playback ? playbackSchema.parse(playback) : null,
+    stale: !!solution && solution.inputRevisionId !== input.revisionId,
+    updatedAt: Date.now(),
+  };
+}
+export async function saveProjectSwap(
+  active: ProjectSnapshot,
+  previous: ProjectSnapshot,
+): Promise<void> {
+  const records = [
+    storedProject("previous", previous),
+    storedProject("active", active),
+  ];
+  await db.transaction("rw", db.projects, () => db.projects.bulkPut(records));
+}
 export async function saveProject(
   input: ProjectInput,
   solution: Solution | null,
   playback: PlaybackState | null,
   cancelled = false,
+  id = "active",
 ): Promise<void> {
-  const stale = !!solution && solution.inputRevisionId !== input.revisionId;
-  const bytes = encodeProject(input, solution, { cancelled });
-  await db.transaction("rw", db.projects, () =>
-    db.projects.put({
-      id: "active",
-      version: 1,
-      bytes,
-      playback: playback ? playbackSchema.parse(playback) : null,
-      stale,
-      updatedAt: Date.now(),
-    }),
-  );
+  const record = storedProject(id, { input, solution, playback, cancelled });
+  await db.transaction("rw", db.projects, () => db.projects.put(record));
 }
 export function migrateStored(raw: unknown): StoredProject {
   const r = z

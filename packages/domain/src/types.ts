@@ -16,6 +16,7 @@ export type CargoType = {
 };
 export type CargoInstance = { id: string; typeId: string };
 export type Vehicle = {
+  presetId?: string;
   lengthMm: number;
   widthMm: number;
   heightMm: number;
