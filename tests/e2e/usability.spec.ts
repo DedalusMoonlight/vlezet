@@ -178,3 +178,24 @@ test("reopening import restores a valid header row after an empty draft", async 
     dialog.getByRole("button", { name: "Перечитать с этими настройками" }),
   ).toBeEnabled();
 });
+
+test("duplicates a cargo with a maximum-length name", async ({ page }) => {
+  await page.goto("/");
+  await section(page, "Груз");
+  await page
+    .getByRole("button", { name: "＋ Добавить груз", exact: true })
+    .click();
+  const dialog = page.getByRole("dialog", { name: "Редактор груза" });
+  const name = "Я".repeat(120);
+  await dialog.getByLabel("Название", { exact: true }).fill(name);
+  await dialog
+    .getByRole("button", { name: "Сохранить груз", exact: true })
+    .click();
+  await expect(page.locator(".cargo-row")).toHaveCount(4);
+  await page
+    .getByRole("button", { name: `Дублировать ${name}`, exact: true })
+    .click();
+  await expect(page.locator(".cargo-row")).toHaveCount(5);
+  await expect(page.locator(".cargo-row").last()).toContainText(" (копия)");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});

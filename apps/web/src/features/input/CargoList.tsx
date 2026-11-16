@@ -1,9 +1,8 @@
-import { randomId } from "@vlezet/domain";
 import { useState } from "react";
 import type { CargoType } from "@vlezet/domain";
 import { useProject } from "../project/store";
 import { CargoEditor } from "./CargoEditor";
-import { replaceCargo, splitRequired } from "./editing";
+import { copyCargo, replaceCargo, splitRequired } from "./editing";
 export function CargoList() {
   const { input, setInput } = useProject();
   const [editing, setEditing] = useState<CargoType | null | undefined>(
@@ -82,16 +81,7 @@ export function CargoList() {
               <button
                 aria-label={`Дублировать ${c.name}`}
                 onClick={() =>
-                  attempt(() =>
-                    apply([
-                      ...input.cargoTypes,
-                      {
-                        ...c,
-                        id: randomId(),
-                        name: c.name + " (копия)",
-                      },
-                    ]),
-                  )
+                  attempt(() => apply([...input.cargoTypes, copyCargo(c)]))
                 }
               >
                 ⧉

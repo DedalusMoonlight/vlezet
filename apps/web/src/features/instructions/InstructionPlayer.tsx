@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { orientedDimensions } from "@vlezet/validation";
 import { cargoInstanceNumber } from "../project/cargoLabel";
 import { useProject } from "../project/store";
 import { CargoScene } from "../../scene/CargoScene";
@@ -58,6 +59,12 @@ export function InstructionPlayer() {
       )
     : null;
   const placement = s.placements.find((p) => p.instanceId === step?.instanceId);
+  const dimensions =
+    type && placement
+      ? orientedDimensions(type, placement.orientation).map((mm) =>
+          (mm / 10).toLocaleString("ru-RU"),
+        )
+      : null;
   const jump = (index: number) => {
     setT(0);
     setPlayback({ ...state, stepIndex: index, paused: true });
@@ -105,10 +112,12 @@ export function InstructionPlayer() {
               №{cargoInstanceNumber(input, step.instanceId)} ·{" "}
               {type.massG / 1000} кг · остановка {step.stop}
             </p>
-            <p className="hint">
-              Снизу грань {placement?.orientation.downFace} · поворот{" "}
-              {(placement?.orientation.yawQuarterTurns ?? 0) * 90}°
-            </p>
+            {dimensions && (
+              <p className="hint">
+                Основание {dimensions[0]} × {dimensions[1]} см · высота{" "}
+                {dimensions[2]} см
+              </p>
+            )}
             <label>
               Прогресс шага
               <input

@@ -5,6 +5,17 @@ import {
   type CargoType,
   type ProjectInput,
 } from "@vlezet/domain";
+
+export function copyCargo(cargo: CargoType): CargoType {
+  const suffix = " (копия)";
+  const characters = Array.from(cargo.name);
+  while (characters.join("").length + suffix.length > 120) characters.pop();
+  return {
+    ...cargo,
+    id: randomId(),
+    name: characters.join("").trimEnd() + suffix,
+  };
+}
 export function replaceCargo(
   input: ProjectInput,
   types: CargoType[],

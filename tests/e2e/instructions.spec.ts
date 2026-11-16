@@ -24,3 +24,48 @@ test("walks loading and unloading by stop without repeating removals", async ({
     page.getByRole("button", { name: "Пауза", exact: true }),
   ).toBeVisible();
 });
+
+test("explains the actual box orientation using dimensions", async ({
+  page,
+}) => {
+  const { makeProject, makeCargo } = await import("../../fixtures/builders");
+  const input = makeProject(
+    [
+      makeCargo({
+        name: "Прибор",
+        lengthMm: 600,
+        widthMm: 400,
+        heightMm: 300,
+        allowedDownFaces: ["+X"],
+      }),
+    ],
+    {
+      vehicle: { lengthMm: 400, widthMm: 300, heightMm: 600, payloadG: 10000 },
+    },
+  );
+  await page.goto("/");
+  await page
+    .getByLabel("Файл проекта JSON")
+    .setInputFiles({
+      name: "orientation.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(
+        JSON.stringify({
+          format: "vlezet",
+          schemaVersion: 1,
+          input,
+          solution: null,
+        }),
+      ),
+    });
+  await page
+    .getByRole("button", { name: "Рассчитать загрузку", exact: true })
+    .click();
+  await expect(page.getByText("План готов", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "3D-инструкция", exact: true })
+    .click();
+  await expect(page.locator(".step-card")).toContainText(
+    "Основание 40 × 30 см · высота 60 см",
+  );
+});
