@@ -9,8 +9,8 @@ import {
 } from "react";
 import { Canvas, useThree, type ThreeEvent } from "@react-three/fiber";
 import { Edges, OrbitControls } from "@react-three/drei";
-import { Color, InstancedMesh, Matrix4, Plane, Vector3 } from "three";
-import type { Placement, ProjectInput, Vec3Mm } from "@vlezet/domain";
+import { Color, InstancedMesh, Matrix4, Vector3 } from "three";
+import type { Placement, ProjectInput } from "@vlezet/domain";
 import { orientedDimensions } from "@vlezet/validation";
 import { Label } from "./Label";
 import { cargoInstanceNumber } from "../features/project/cargoLabel";
@@ -56,15 +56,11 @@ function Boxes({
   placements,
   selected,
   onSelect,
-  drag,
-  onDrag,
 }: {
   input: ProjectInput;
   placements: Placement[];
   selected: string | null;
   onSelect?: (id: string) => void;
-  drag: boolean;
-  onDrag?: (p: Vec3Mm) => void;
 }) {
   const ref = useRef<InstancedMesh>(null);
   const types = useMemo(
@@ -111,50 +107,16 @@ function Boxes({
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
   }, [input, placements, selected, types]);
-  const dragging = useRef<{ id: string; plane: Plane; offset: Vector3 } | null>(
-    null,
-  );
-  const pointerDown = (e: ThreeEvent<PointerEvent>) => {
-    if (e.instanceId === undefined) return;
-    e.stopPropagation();
-    const p = placements[e.instanceId];
-    onSelect?.(p.instanceId);
-    if (!drag || p.instanceId !== selected) return;
-    const plane = new Plane(new Vector3(0, 1, 0), -e.point.y);
-    const hit = e.ray.intersectPlane(plane, new Vector3());
-    if (!hit) return;
-    dragging.current = {
-      id: p.instanceId,
-      plane,
-      offset: hit.clone().sub(new Vector3(...scenePosition(p.position))),
-    };
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-  };
-  const move = (e: ThreeEvent<PointerEvent>) => {
-    if (!dragging.current) return;
-    const p = e.ray.intersectPlane(dragging.current.plane, new Vector3());
-    if (p) {
-      p.sub(dragging.current.offset);
-      const source = placements.find(
-        (p) => p.instanceId === dragging.current!.id,
-      )!;
-      onDrag?.({
-        x: Math.round(p.x * 1000),
-        y: Math.round(-p.z * 1000),
-        z: source.position.z,
-      });
-    }
-  };
   const active = placements.find((p) => p.instanceId === selected);
   return (
     <>
       <instancedMesh
         ref={ref}
         args={[undefined, undefined, placements.length]}
-        onPointerDown={pointerDown}
-        onPointerMove={move}
-        onPointerUp={() => {
-          dragging.current = null;
+        onClick={(e: ThreeEvent<MouseEvent>) => {
+          if (e.instanceId === undefined) return;
+          e.stopPropagation();
+          if (e.delta <= 5) onSelect?.(placements[e.instanceId].instanceId);
         }}
       >
         <boxGeometry />
@@ -212,17 +174,11 @@ export function CargoScene({
   placements,
   selected = null,
   onSelect,
-  drag = false,
-  onDrag,
-  preview,
 }: {
   input: ProjectInput;
   placements: Placement[];
   selected?: string | null;
   onSelect?: (id: string) => void;
-  drag?: boolean;
-  onDrag?: (p: Vec3Mm) => void;
-  preview?: Placement;
 }) {
   const [view, setView] = useState("perspective");
   const [lost, setLost] = useState(false);
@@ -275,41 +231,11 @@ export function CargoScene({
                 placements={placements}
                 selected={selected}
                 onSelect={onSelect}
-                drag={drag}
-                onDrag={onDrag}
               />
             )}
-            {preview &&
-              (() => {
-                const c = input.cargoTypes.find(
-                  (c) =>
-                    c.id ===
-                    input.instances.find((i) => i.id === preview.instanceId)!
-                      .typeId,
-                )!;
-                const [a, b, cZ] = orientedDimensions(c, preview.orientation);
-                return (
-                  <mesh
-                    position={scenePosition({
-                      x: preview.position.x + a / 2,
-                      y: preview.position.y + b / 2,
-                      z: preview.position.z + cZ / 2,
-                    })}
-                  >
-                    <boxGeometry args={[a / 1000, cZ / 1000, b / 1000]} />
-                    <meshBasicMaterial
-                      color="#e6a55a"
-                      transparent
-                      opacity={0.45}
-                    />
-                    <Edges color="#a85820" />
-                  </mesh>
-                );
-              })()}
             <Label text="← Задние двери" position={[-0.2, 0, -w / 2]} />
             <OrbitControls
               makeDefault
-              enabled={!drag}
               target={[l / 2, h / 3, -w / 2]}
               maxDistance={Math.max(l, w, h) * 8}
               minDistance={0.2}
@@ -332,9 +258,7 @@ export function CargoScene({
         )}
       </div>
       <p className="hint">
-        {drag
-          ? "Перетаскивайте выбранную коробку. Подтвердите допустимую позицию ниже."
-          : "Поверните одним пальцем · масштабируйте двумя · нажмите на коробку"}
+        Поверните одним пальцем · масштабируйте двумя · нажмите на коробку
       </p>
     </>
   );

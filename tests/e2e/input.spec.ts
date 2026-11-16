@@ -91,7 +91,5 @@ test("marks inline drafts and invalid values as unsafe for a PWA update", async 
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
-  await page.getByLabel("Выбранная коробка").selectOption({ index: 1 });
-  await page.getByLabel("От дверей X, мм").fill("-100");
-  await expect(page.locator('[data-unsaved="true"]')).toHaveCount(1);
+  await expect(page.locator('[data-unsaved="true"]')).toHaveCount(0);
 });

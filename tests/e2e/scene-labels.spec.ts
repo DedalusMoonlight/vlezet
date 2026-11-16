@@ -8,9 +8,12 @@ test("3D labels preserve user names and stay readable when zoomed out", async ({
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  const input = makeProject([
-    makeCargo({ id: "internal-cargo", name: cargoName, quantity: 2 }),
-  ]);
+  const input = makeProject(
+    [makeCargo({ id: "internal-cargo", name: cargoName, quantity: 2 })],
+    {
+      vehicle: { lengthMm: 200, widthMm: 100, heightMm: 100, payloadG: 10000 },
+    },
+  );
   await page.goto("/");
   await page.getByLabel("Файл проекта JSON").setInputFiles({
     name: "labels.json",
@@ -28,13 +31,11 @@ test("3D labels preserve user names and stay readable when zoomed out", async ({
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
-  await page
-    .getByLabel("Выбранная коробка")
-    .selectOption(input.instances[1].id);
+  await page.locator(".cargo-scene canvas").click();
   const label = page.locator(".scene-cargo-label");
   await expect(label).toBeVisible();
   await expect(label.locator("strong")).toHaveText(cargoName);
-  await expect(label).toContainText("№2");
+  await expect(label).toContainText(/№[12]/);
   await expect(label).not.toContainText("internal-cargo");
   const before = await label.boundingBox();
   expect(

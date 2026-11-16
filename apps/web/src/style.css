@@ -586,12 +586,6 @@ th {
   font-size: 10px;
   color: #81907b;
 }
-.edit-panel {
-  border: 1px solid #e2e8dc;
-  background: #fafbf7;
-  border-radius: 12px;
-  padding: 16px;
-}
 .result-card {
   overflow: hidden;
 }
@@ -987,7 +981,6 @@ label {
 .result-tabs button[aria-pressed="true"] {
   border-bottom-color: #245dad;
 }
-.edit-panel,
 .step-card {
   background: #f5f7fa;
   border-radius: 6px;

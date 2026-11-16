@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutEditor } from "./LayoutEditor";
+import { LayoutView } from "./LayoutView";
 import { InstructionPlayer } from "../instructions/InstructionPlayer";
 import { useProject } from "../project/store";
 export function ResultView() {
@@ -22,7 +22,7 @@ export function ResultView() {
           3D-инструкция
         </button>
       </div>
-      {mode === "layout" ? <LayoutEditor /> : <InstructionPlayer />}
+      {mode === "layout" ? <LayoutView /> : <InstructionPlayer />}
     </>
   );
 }

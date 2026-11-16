@@ -131,23 +131,6 @@ test("offers a full load for a new stop order and only applies it on request", a
   ).toBeVisible();
 });
 
-test("selecting a support level replaces an empty coordinate draft", async ({
-  page,
-}) => {
-  await page.goto("/");
-  await page
-    .getByRole("button", { name: "Рассчитать загрузку", exact: true })
-    .click();
-  await expect(page.getByText("План готов", { exact: true })).toBeVisible();
-  await page.getByLabel("Выбранная коробка").selectOption({ index: 1 });
-  await page.getByLabel("От пола Z, мм").fill("");
-  await page.getByLabel("Уровень опоры").selectOption("0");
-  await expect(page.getByLabel("От пола Z, мм")).toHaveValue("0");
-  await expect(page.getByLabel("От пола Z, мм")).toHaveAttribute(
-    "aria-invalid",
-    "false",
-  );
-});
 test("applying dimensions does not silently replace an invalid gap", async ({
   page,
 }) => {
@@ -171,35 +154,6 @@ test("applying dimensions does not silently replace an invalid gap", async ({
   await expect(
     page.getByLabel("До стен и потолка, мм", { exact: true }),
   ).toHaveValue("");
-});
-
-test("undo resets unfinished coordinates and keeps the selected box", async ({
-  page,
-}) => {
-  await page.goto("/");
-  await page
-    .getByRole("button", { name: "Рассчитать загрузку", exact: true })
-    .click();
-  await expect(page.getByText("План готов", { exact: true })).toBeVisible();
-  const selection = page.getByLabel("Выбранная коробка");
-  await selection.selectOption({ index: 1 });
-  const selected = await selection.inputValue();
-  const x = await page.getByLabel("От дверей X, мм").inputValue();
-  const yaw = Number(
-    await page.getByRole("combobox", { name: "Поворот", exact: true }).inputValue(),
-  );
-  await page
-    .getByRole("combobox", { name: "Поворот", exact: true })
-    .selectOption(String((yaw + 2) % 4));
-  await page.getByRole("button", { name: "Применить позицию" }).click();
-  await page.getByLabel("От дверей X, мм").fill("");
-  await page.getByRole("button", { name: "Отменить правку" }).click();
-  await expect(selection).toHaveValue(selected);
-  await expect(page.getByLabel("От дверей X, мм")).toHaveValue(x);
-  await expect(page.getByLabel("От дверей X, мм")).toHaveAttribute(
-    "aria-invalid",
-    "false",
-  );
 });
 
 test("reopening import restores a valid header row after an empty draft", async ({
