@@ -1,3 +1,4 @@
+import { section, files } from "./navigation";
 import { test, expect } from "@playwright/test";
 test("publishes an immutable snapshot, opens it and deletes it with author secret", async ({
   page,
@@ -8,6 +9,7 @@ test("publishes an immutable snapshot, opens it and deletes it with author secre
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
+  await files(page);
   await page
     .getByRole("button", { name: "Поделиться планом", exact: true })
     .click();
@@ -31,10 +33,12 @@ test("publishes an immutable snapshot, opens it and deletes it with author secre
     receiver.getByText("Шаг 1 из 18", { exact: true }),
   ).toBeVisible();
   await dialog.getByRole("button", { name: "Закрыть публикацию" }).click();
+  await section(page, "Груз");
   await page
     .getByLabel(/Обязательный:/)
     .first()
     .uncheck();
+  await files(page);
   await page
     .getByRole("button", { name: "Поделиться планом", exact: true })
     .click({ timeout: 3000 });

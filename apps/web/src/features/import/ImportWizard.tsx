@@ -8,6 +8,7 @@ import {
   type ImportUnits,
 } from "@vlezet/io";
 import { useProject } from "../project/store";
+import { IntegerInput } from "../input/IntegerInput";
 import { download } from "./download";
 const fields = [
   ["name", "Название"],
@@ -21,7 +22,8 @@ const fields = [
   ["allowedDownFaces", "Грани"],
   ["maxTopLoadG", "Масса сверху"],
 ] as const;
-export function ImportWizard() {
+export function ImportWizard({ onImported }: { onImported?: () => void }) {
+  const [headerValid, setHeaderValid] = useState(true);
   const { input, setInput } = useProject();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -174,21 +176,13 @@ export function ImportWizard() {
               Скачать шаблон XLSX
             </button>
             <div className="fields-three">
-              <label>
-                Заголовок в строке
-                <input
-                  type="number"
-                  min={1}
-                  max={1000}
-                  value={options.headerRow}
-                  onChange={(e) =>
-                    setOptions({
-                      ...options,
-                      headerRow: Number(e.target.value),
-                    })
-                  }
-                />
-              </label>
+              <IntegerInput
+                label="Заголовок в строке"
+                value={options.headerRow}
+                max={1000}
+                onValidityChange={setHeaderValid}
+                onChange={(headerRow) => setOptions({ ...options, headerRow })}
+              />
               <label>
                 Кодировка CSV
                 <select
@@ -234,7 +228,7 @@ export function ImportWizard() {
               </label>
             )}
             <button
-              disabled={!file || busy}
+              disabled={!file || busy || !headerValid}
               onClick={() => file && void read(file)}
             >
               Перечитать с этими настройками
@@ -368,6 +362,7 @@ export function ImportWizard() {
                     try {
                       setInput(commitImport(input, draft!, mode, skip));
                       setOpen(false);
+                      onImported?.();
                     } catch (e) {
                       setError(
                         e instanceof Error ? e.message : "Ошибка импорта",

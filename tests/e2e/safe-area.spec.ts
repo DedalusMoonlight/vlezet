@@ -1,13 +1,25 @@
+import { section } from "./navigation";
 import { test, expect } from "@playwright/test";
 
-test("tall dialogs stay inside Android system bars in landscape", async ({ page }) => {
+test("tall dialogs stay inside Android system bars in landscape", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 740, height: 360 });
   await page.goto("/");
   await page.evaluate(() => {
-    for (const [edge, size] of Object.entries({ top: 36, bottom: 48, left: 32, right: 24 })) {
-      document.documentElement.style.setProperty(`--safe-area-inset-${edge}`, `${size}px`);
+    for (const [edge, size] of Object.entries({
+      top: 36,
+      bottom: 48,
+      left: 32,
+      right: 24,
+    })) {
+      document.documentElement.style.setProperty(
+        `--safe-area-inset-${edge}`,
+        `${size}px`,
+      );
     }
   });
+  await section(page, "Груз");
   await page.getByRole("button", { name: "＋ Добавить груз" }).click();
   const dialog = page.getByRole("dialog");
   const bounds = await dialog.boundingBox();

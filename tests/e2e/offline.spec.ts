@@ -1,3 +1,4 @@
+import { section, files } from "./navigation";
 import { test, expect } from "@playwright/test";
 test("offline import, calculation, persistence and JSON/PDF export", async ({
   page,
@@ -9,10 +10,12 @@ test("offline import, calculation, persistence and JSON/PDF export", async ({
   );
   test.setTimeout(90000);
   await page.goto("/");
+  await files(page);
   await expect(page.getByText("Доступно офлайн", { exact: true })).toBeVisible({
     timeout: 20000,
   });
   await page.reload();
+  await files(page);
   await expect(
     page.getByRole("button", { name: "Импорт Excel / CSV" }),
   ).toBeVisible();
@@ -40,11 +43,13 @@ test("offline import, calculation, persistence and JSON/PDF export", async ({
     page.getByText("Сохранено на устройстве", { exact: true }),
   ).toBeVisible();
   await page.reload();
+  await section(page, "План");
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "3D-инструкция", exact: true })
     .click();
   await expect(page.getByText("Шаг 2 из 20", { exact: true })).toBeVisible();
+  await files(page);
   const jsonPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Скачать JSON", exact: true }).click();
   const json = await jsonPromise;

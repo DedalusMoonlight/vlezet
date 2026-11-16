@@ -69,7 +69,8 @@ jobs:
             adb shell svc wifi disable
             adb shell svc data disable
             ./android/gradlew -p android :app:connectedDebugAndroidTest --no-daemon --max-workers=2
-            adb exec-out run-as app.vlezet.preview cat files/smoke.png > artifacts/android-smoke.png
+            adb pull /sdcard/vlezet-smoke.png artifacts/android-smoke.png
+            node -e 'const b=require("node:fs").readFileSync("artifacts/android-smoke.png"); if(b.subarray(0,8).toString("hex")!=="89504e470d0a1a0a") throw new Error("Invalid screenshot")'
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:

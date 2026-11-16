@@ -1,3 +1,4 @@
+import { section } from "./navigation";
 import { test, expect } from "@playwright/test";
 test("calculates a plan on the device without freezing controls", async ({
   page,
@@ -74,6 +75,7 @@ test("calculates when the secure-context UUID API is unavailable", async ({
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click({ timeout: 3000 });
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
+  await section(page, "Груз");
   await page.getByRole("button", { name: "＋ Добавить груз" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
 });

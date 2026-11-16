@@ -1,5 +1,8 @@
 import type { ProjectInput } from "../../../../../packages/domain/src";
-import type { Solution } from "../../../../../packages/packing/src";
+import type {
+  Solution,
+  StopSuggestion,
+} from "../../../../../packages/packing/src";
 import { score, better } from "../../../../../packages/packing/src/score";
 import type { WorkerResponse } from "../../workers/protocol";
 export type ProjectState = {
@@ -10,6 +13,8 @@ export type ProjectState = {
   status: "idle" | "running" | "done" | "cancelled" | "error";
   error: string | null;
   attempts: number;
+  stopSuggestion: StopSuggestion | null;
+  checkingStops: boolean;
 };
 export type ProjectAction =
   | { kind: "input"; input: ProjectInput }
@@ -24,6 +29,8 @@ export const createState = (input: ProjectInput): ProjectState => ({
   status: "idle",
   error: null,
   attempts: 0,
+  stopSuggestion: null,
+  checkingStops: false,
 });
 export function projectReducer(
   s: ProjectState,
@@ -38,12 +45,16 @@ export function projectReducer(
       activeJobId: null,
       status: "idle",
       error: null,
+      stopSuggestion: null,
+      checkingStops: false,
     };
   if (a.kind === "solution")
     return {
       ...s,
       currentSolution: a.solution,
       status: "done",
+      stopSuggestion: null,
+      checkingStops: false,
       activeJobId: null,
     };
   if (a.kind === "start")
@@ -53,13 +64,22 @@ export function projectReducer(
       status: "running",
       error: null,
       attempts: 0,
+      stopSuggestion: null,
+      checkingStops: false,
     };
   const m = a.message;
   if (m.jobId !== s.activeJobId || m.inputRevisionId !== s.input.revisionId)
     return s;
+  if (m.kind === "checking-stops") return { ...s, checkingStops: true };
   if (m.kind === "progress") return { ...s, attempts: m.attempts };
   if (m.kind === "error")
-    return { ...s, status: "error", activeJobId: null, error: m.error };
+    return {
+      ...s,
+      status: "error",
+      activeJobId: null,
+      error: m.error,
+      checkingStops: false,
+    };
   let solution = s.currentSolution;
   if (
     m.solution &&
@@ -74,6 +94,8 @@ export function projectReducer(
   return {
     ...s,
     currentSolution: solution,
+    stopSuggestion: m.kind === "done" ? (m.suggestion ?? null) : null,
+    checkingStops: m.kind === "best" ? s.checkingStops : false,
     status:
       m.kind === "best"
         ? "running"

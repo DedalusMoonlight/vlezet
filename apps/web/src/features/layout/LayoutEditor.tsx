@@ -1,3 +1,4 @@
+import { IntegerInput } from "../input/IntegerInput";
 import { useState } from "react";
 import type { Placement, Vec3Mm } from "@vlezet/domain";
 import { faces } from "@vlezet/domain";
@@ -14,6 +15,10 @@ import {
 } from "./commands";
 export function LayoutEditor() {
   const { input, currentSolution: s, setSolution } = useProject();
+  const [editEpoch, setEditEpoch] = useState(0);
+  const [invalidPosition, setInvalidPosition] = useState<
+    Record<string, boolean>
+  >({});
   const [selected, setSelected] = useState<string | null>(null);
   const [draft, setDraft] = useState<Placement | null>(null);
   const [drag, setDrag] = useState(false);
@@ -21,7 +26,18 @@ export function LayoutEditor() {
   if (!s) return <CargoScene input={input} placements={[]} />;
   const select = (id: string) => {
     setSelected(id);
+    setEditEpoch((v) => v + 1);
+    setInvalidPosition({});
     setDraft(structuredClone(s.placements.find((p) => p.instanceId === id)!));
+  };
+  const boxLabel = (id: string) => {
+    const instance = input.instances.find((i) => i.id === id)!;
+    const cargo = input.cargoTypes.find((c) => c.id === instance.typeId)!;
+    const number =
+      input.instances
+        .filter((i) => i.typeId === cargo.id)
+        .findIndex((i) => i.id === id) + 1;
+    return `${cargo.name} · №${number}`;
   };
   const active = s.placements.find((p) => p.instanceId === selected);
   const c = active
@@ -50,7 +66,8 @@ export function LayoutEditor() {
   const h =
     history?.present === s ? history : { past: [], present: s, future: [] };
   const commit = () => {
-    if (!result?.accepted) return;
+    if (!result?.accepted || Object.values(invalidPosition).some(Boolean))
+      return;
     const next = restoreSolution(input, {
       ...s,
       placements: result.placements,
@@ -62,11 +79,20 @@ export function LayoutEditor() {
     const next = redo ? historyRedo(h) : historyUndo(h);
     setHistory(next);
     setSolution(next.present);
-    setDraft(null);
-    setSelected(null);
+    setEditEpoch((v) => v + 1);
+    setDraft(
+      structuredClone(
+        next.present.placements.find((p) => p.instanceId === selected) ?? null,
+      ),
+    );
+    setInvalidPosition({});
   };
   const updatePosition = (position: Vec3Mm) =>
     setDraft((d) => (d ? { ...d, position } : d));
+  const replacePosition = (position: Vec3Mm) => {
+    setEditEpoch((v) => v + 1);
+    updatePosition(position);
+  };
   const stops = [...new Set(input.cargoTypes.map((c) => c.stop))].sort(
     (a, b) => a - b,
   );
@@ -93,7 +119,7 @@ export function LayoutEditor() {
         selected={selected}
         onSelect={select}
         drag={drag}
-        onDrag={updatePosition}
+        onDrag={replacePosition}
         preview={changed ? draft! : undefined}
       />
       <div className="legend">
@@ -138,12 +164,16 @@ export function LayoutEditor() {
         <select
           value={selected ?? ""}
           onChange={(e) =>
-            e.target.value ? select(e.target.value) : setSelected(null)
+            e.target.value
+              ? select(e.target.value)
+              : (setSelected(null), setDraft(null))
           }
         >
           <option value="">Выберите в 3D или списке</option>
           {s.placements.map((p) => (
-            <option key={p.instanceId}>{p.instanceId}</option>
+            <option key={p.instanceId} value={p.instanceId}>
+              {boxLabel(p.instanceId)}
+            </option>
           ))}
         </select>
       </label>
@@ -156,10 +186,13 @@ export function LayoutEditor() {
         </button>
       </div>
       {draft && c && (
-        <div className="edit-panel" data-unsaved={!!changed}>
-          <h3>
-            {c.name} · {selected}
-          </h3>
+        <div
+          className="edit-panel"
+          data-unsaved={
+            !!changed || Object.values(invalidPosition).some(Boolean)
+          }
+        >
+          <h3>{boxLabel(selected!)}</h3>
           <p className="hint">
             Масса {c.massG / 1000} кг · остановка {c.stop} · сверху{" "}
             {Math.round((s.report?.loads.topLoadG[selected!] ?? 0) / 10) / 100}{" "}
@@ -175,19 +208,19 @@ export function LayoutEditor() {
           </label>
           <div className="fields-three">
             {(["x", "y", "z"] as const).map((axis, i) => (
-              <label key={axis}>
-                {["От дверей X, мм", "Слева Y, мм", "От пола Z, мм"][i]}
-                <input
-                  type="number"
-                  value={draft.position[axis]}
-                  onChange={(e) =>
-                    updatePosition({
-                      ...draft.position,
-                      [axis]: Number(e.target.value),
-                    })
-                  }
-                />
-              </label>
+              <IntegerInput
+                key={selected + axis + editEpoch}
+                label={["От дверей X, мм", "Слева Y, мм", "От пола Z, мм"][i]}
+                value={draft.position[axis]}
+                min={-100000}
+                max={100000}
+                onValidityChange={(valid) =>
+                  setInvalidPosition((v) => ({ ...v, [axis]: !valid }))
+                }
+                onChange={(value) =>
+                  updatePosition({ ...draft.position, [axis]: value })
+                }
+              />
             ))}
           </div>
           <label>
@@ -195,7 +228,10 @@ export function LayoutEditor() {
             <select
               value={levels.includes(draft.position.z) ? draft.position.z : ""}
               onChange={(e) =>
-                updatePosition({ ...draft.position, z: Number(e.target.value) })
+                replacePosition({
+                  ...draft.position,
+                  z: Number(e.target.value),
+                })
               }
             >
               <option value="" disabled>
@@ -258,7 +294,11 @@ export function LayoutEditor() {
             ))}
           <button
             className="primary"
-            disabled={!changed || !result?.accepted}
+            disabled={
+              !changed ||
+              !result?.accepted ||
+              Object.values(invalidPosition).some(Boolean)
+            }
             onClick={commit}
           >
             Применить позицию
@@ -269,7 +309,7 @@ export function LayoutEditor() {
         <details>
           <summary>Не размещено: {s.unplacedIds.length}</summary>
           {s.unplacedIds.map((id) => (
-            <p key={id}>{id}</p>
+            <p key={id}>{boxLabel(id)}</p>
           ))}
           <p className="hint">
             Поиск не доказывает невозможность размещения. Можно увеличить кузов

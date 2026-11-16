@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import vehicles from "../../data/vehicles.json";
 import { useProject } from "../project/store";
 import { Measure } from "./Measure";
 import type { Vehicle } from "@vlezet/domain";
-export function VehicleForm() {
+export function VehicleForm({
+  onDirtyChange,
+}: {
+  onDirtyChange: (dirty: boolean) => void;
+}) {
+  const [validity, setValidity] = useState<Record<string, boolean>>({});
   const { input, setInput } = useProject();
   const [preset, setPreset] = useState("");
   const [draft, setDraft] = useState<Vehicle>(input.vehicle);
@@ -13,15 +18,20 @@ export function VehicleForm() {
   const [key, setKey] = useState(0);
   const v = vehicles.find((x) => x.id === preset);
   const dirty =
-    JSON.stringify(draft) !== JSON.stringify(input.vehicle) || !confirmed;
+    JSON.stringify(draft) !== JSON.stringify(input.vehicle) ||
+    !confirmed ||
+    Object.values(validity).some((valid) => !valid);
+  useEffect(() => {
+    onDirtyChange(dirty);
+  }, [dirty, onDirtyChange]);
   return (
     <section className="card" data-unsaved={dirty}>
-      <span className="eyebrow">01 / НА ЧЁМ ЕДЕМ</span>
-      <h2>Место для всего</h2>
+      <h2>Машина</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (
+            Object.values(validity).some((valid) => !valid) ||
             !payload ||
             !confirmed ||
             e.currentTarget.querySelector('[aria-invalid="true"]')
@@ -54,12 +64,16 @@ export function VehicleForm() {
                   payloadG: input.vehicle.payloadG,
                 });
                 setKey((k) => k + 1);
+                setValidity((v) => ({
+                  wallGap: v.wallGap ?? true,
+                  horizontalGap: v.horizontalGap ?? true,
+                }));
                 setConfirmed(false);
                 setPayload(false);
               }
             }}
           >
-            <option value="">Свои размеры / демонстрационный кузов</option>
+            <option value="">Свои размеры</option>
             {vehicles.map((x) => (
               <option key={x.id} value={x.id}>
                 {x.name}
@@ -74,6 +88,9 @@ export function VehicleForm() {
               key={k}
               unit="cm"
               value={draft[k]}
+              onValidityChange={(valid) =>
+                setValidity((v) => ({ ...v, [k]: valid }))
+              }
               onChange={(n) => {
                 setDraft((d) => ({ ...d, [k]: n }));
                 setConfirmed(false);
@@ -86,6 +103,9 @@ export function VehicleForm() {
           label="Доступная грузоподъёмность, кг"
           unit="kg"
           value={draft.payloadG}
+          onValidityChange={(valid) =>
+            setValidity((v) => ({ ...v, payload: valid }))
+          }
           onChange={(n) => {
             setDraft((d) => ({ ...d, payloadG: n }));
             setPayload(true);
@@ -119,7 +139,7 @@ export function VehicleForm() {
           пределами прямоугольника.
         </p>
         {error && <p role="alert">{error}</p>}
-        <button type="submit">
+        <button type="submit" disabled={!dirty}>
           {dirty ? "Применить размеры" : "Размеры применены ✓"}
         </button>
       </form>
@@ -130,6 +150,9 @@ export function VehicleForm() {
             label="До стен и потолка, мм"
             value={input.settings.wallGapMm}
             zero
+            onValidityChange={(valid) =>
+              setValidity((v) => ({ ...v, wallGap: valid }))
+            }
             onChange={(v) =>
               setInput({
                 ...input,
@@ -141,6 +164,9 @@ export function VehicleForm() {
             label="Между коробками, мм"
             value={input.settings.horizontalGapMm}
             zero
+            onValidityChange={(valid) =>
+              setValidity((v) => ({ ...v, horizontalGap: valid }))
+            }
             onChange={(v) =>
               setInput({
                 ...input,

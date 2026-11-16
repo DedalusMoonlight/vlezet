@@ -4,8 +4,12 @@ import {
   parseProject,
   type ProjectInput,
 } from "../../../../../packages/domain/src";
-import type { Solution } from "../../../../../packages/packing/src";
+import {
+  reorderStops,
+  type Solution,
+} from "../../../../../packages/packing/src";
 import { createState, projectReducer, type ProjectState } from "./reducer";
+import { restoreSolution } from "@vlezet/io";
 import { demoProject } from "./demo";
 import type { WorkerResponse } from "../../workers/protocol";
 let worker: Worker | null = null;
@@ -90,4 +94,29 @@ export function cancelCalculation(): void {
       );
     }
   }, 500);
+}
+
+export function applyStopSuggestion(): void {
+  const state = useProject.getState();
+  const suggestion = state.stopSuggestion;
+  if (
+    !suggestion ||
+    state.status === "running" ||
+    suggestion.solution.inputRevisionId !== state.input.revisionId
+  )
+    return;
+  const input = parseProject({
+    ...reorderStops(state.input, suggestion.stopOrder),
+    revisionId: randomId(),
+  });
+  const solution = restoreSolution(input, {
+    ...suggestion.solution,
+    inputRevisionId: input.revisionId,
+  });
+  if (
+    !solution?.report?.valid ||
+    solution.placements.length !== input.instances.length
+  )
+    return;
+  state.restore(input, solution);
 }

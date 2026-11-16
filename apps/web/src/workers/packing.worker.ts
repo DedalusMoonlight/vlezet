@@ -1,4 +1,4 @@
-import { search } from "../../../../packages/packing/src";
+import { search, suggestStopOrder } from "../../../../packages/packing/src";
 import type { WorkerRequest, WorkerResponse } from "./protocol";
 const jobs = new Map<string, AbortController>();
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
@@ -22,8 +22,22 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
       },
       (e) => send({ ...identity, ...e }),
     );
+    let suggestion = null;
+    if (
+      !controller.signal.aborted &&
+      solution.placements.length < m.input.instances.length
+    ) {
+      send({ ...identity, kind: "checking-stops" });
+      suggestion = await suggestStopOrder(m.input, solution, {
+        seed: m.seed,
+        maxAttempts: 16,
+        deadlineMs: 4000,
+        signal: controller.signal,
+      });
+    }
     send({
       ...identity,
+      suggestion,
       kind: controller.signal.aborted ? "cancelled" : "done",
       solution,
     });

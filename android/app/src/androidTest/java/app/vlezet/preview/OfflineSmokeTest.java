@@ -3,9 +3,8 @@ package app.vlezet.preview;
 import static org.junit.Assert.*;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.platform.app.InstrumentationRegistry;
-import android.graphics.Bitmap;
-import java.io.File;
-import java.io.FileOutputStream;
+import android.os.ParcelFileDescriptor;
+import java.io.InputStream;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -39,15 +38,21 @@ public class OfflineSmokeTest {
             js(scenario, "[...document.querySelectorAll('button')].find(b=>b.textContent==='Рассчитать загрузку').click()");
             waitFor(scenario, "document.body.innerText.includes('План готов')");
             waitFor(scenario, "document.body.innerText.includes('Сохранено на устройстве')");
+            js(scenario, "document.querySelector('details.file-menu').open=true");
             assertEquals("true", js(scenario, "document.body.innerText.includes('Android · Работает офлайн')"));
+            js(scenario, "document.querySelector('details.file-menu').open=false");
             assertEquals("true", js(scenario, "!!document.querySelector('canvas') && !!document.querySelector('canvas').getContext('webgl2')"));
             scenario.onActivity(activity -> activity.getBridge().getWebView().reload());
             waitFor(scenario, "document.body.innerText.includes('План готов')");
+            js(scenario, "[...document.querySelectorAll('.section-nav button')].find(b=>b.textContent==='План').click()");
             js(scenario, "document.querySelector('.result-column').scrollIntoView()");
             Thread.sleep(500);
-            try (FileOutputStream image = new FileOutputStream(new File(
-                    InstrumentationRegistry.getInstrumentation().getTargetContext().getFilesDir(), "smoke.png"))) {
-                InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot().compress(Bitmap.CompressFormat.PNG, 100, image);
+            // The runner may uninstall the app after tests. Keep the screenshot outside app data.
+            try (InputStream result = new ParcelFileDescriptor.AutoCloseInputStream(
+                    InstrumentationRegistry.getInstrumentation().getUiAutomation()
+                        .executeShellCommand("screencap -p /sdcard/vlezet-smoke.png"))) {
+                byte[] buffer = new byte[1024];
+                while (result.read(buffer) != -1) { }
             }
             js(scenario, "[...document.querySelectorAll('button')].find(b=>b.textContent==='3D-инструкция').click()");
             waitFor(scenario, "document.body.innerText.includes('Шаг 1 из 18')");

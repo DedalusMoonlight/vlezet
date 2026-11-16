@@ -44,3 +44,43 @@ it("preserves inputs on failure and invalidates old solutions on edit", () => {
   expect(s.status).toBe("error");
   expect(s.error).toBe("Ошибка");
 });
+it("clears alternative orders on edits and ignores late route replies", async () => {
+  const { search, suggestStopOrder } = await import("@vlezet/packing");
+  const input = makeProject();
+  const options = {
+    seed: 1,
+    maxAttempts: 1,
+    deadlineMs: 1000,
+    signal: new AbortController().signal,
+  };
+  const solution = await search(input, options, () => {});
+  const suggestion = await suggestStopOrder(input, solution, options);
+  let s = projectReducer(createState(input), { kind: "start", jobId: "A" });
+  s = projectReducer(s, {
+    kind: "message",
+    message: {
+      kind: "checking-stops",
+      jobId: "A",
+      inputRevisionId: input.revisionId,
+    },
+  });
+  expect(s.checkingStops).toBe(true);
+  s = projectReducer(s, {
+    kind: "input",
+    input: { ...input, revisionId: "new" },
+  });
+  const edited = s;
+  s = projectReducer(s, {
+    kind: "message",
+    message: {
+      kind: "done",
+      jobId: "A",
+      inputRevisionId: input.revisionId,
+      solution,
+      suggestion,
+    },
+  });
+  expect(s).toBe(edited);
+  expect(s.checkingStops).toBe(false);
+  expect(s.stopSuggestion).toBeNull();
+});

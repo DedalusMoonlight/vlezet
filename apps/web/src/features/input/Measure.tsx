@@ -6,12 +6,14 @@ export function Measure({
   onChange,
   unit = "mm",
   zero = false,
+  onValidityChange,
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
   unit?: "mm" | "cm" | "m" | "g" | "kg";
   zero?: boolean;
+  onValidityChange?: (valid: boolean) => void;
 }) {
   const id = useId();
   const divisor = { mm: 1, cm: 10, m: 1000, g: 1, kg: 1000 }[unit];
@@ -20,14 +22,17 @@ export function Measure({
   const [rounded, setRounded] = useState<number | null>(null);
   const accept = (n: number) => {
     if (n < (zero ? 0 : 1)) {
+      onValidityChange?.(false);
       setError(zero ? "Не меньше нуля" : "Больше нуля");
       return;
     }
     try {
       onChange(n);
+      onValidityChange?.(true);
       setError("");
       setRounded(null);
     } catch {
+      onValidityChange?.(false);
       setError("Проверьте значение и пределы проекта");
     }
   };
@@ -49,6 +54,7 @@ export function Measure({
               ? { ok: true as const, value: 0 }
               : normalizeMeasure(t, unit);
           if (!n.ok) {
+            onValidityChange?.(false);
             setError(n.error);
             setRounded(n.rounded ?? null);
             return;

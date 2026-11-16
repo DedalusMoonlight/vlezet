@@ -25,31 +25,36 @@ export function CargoList() {
     <section className="card">
       <div className="section-head">
         <div>
-          <span className="eyebrow">02 / ЧТО ВЕЗЁМ</span>
           <h2>
             Ваш груз <span className="count">{input.instances.length}</span>
           </h2>
         </div>
         <button onClick={() => setEditing(null)}>＋ Добавить груз</button>
       </div>
-      <div className="actions compact">
-        <button
-          onClick={() =>
-            apply(input.cargoTypes.map((c) => ({ ...c, required: true })))
-          }
-        >
-          Все обязательные
-        </button>
-        <button
-          onClick={() =>
-            apply(input.cargoTypes.map((c) => ({ ...c, required: false })))
-          }
-        >
-          Все необязательные
-        </button>
-      </div>
+      <details className="bulk-actions">
+        <summary>Обязательный груз</summary>
+        <p className="hint">
+          Отметьте галочками грузы, которые обязательно нужно взять.
+        </p>
+        <div className="actions compact">
+          <button
+            onClick={() =>
+              apply(input.cargoTypes.map((c) => ({ ...c, required: true })))
+            }
+          >
+            Все обязательные
+          </button>
+          <button
+            onClick={() =>
+              apply(input.cargoTypes.map((c) => ({ ...c, required: false })))
+            }
+          >
+            Все необязательные
+          </button>
+        </div>
+      </details>
       <div className="cargo-list">
-        {input.cargoTypes.map((c, i) => (
+        {input.cargoTypes.map((c) => (
           <article className="cargo-row" key={c.id}>
             <label className="check">
               <input
@@ -64,12 +69,6 @@ export function CargoList() {
                   )
                 }
               />
-              <span
-                className="cargo-icon"
-                style={{ background: ["#d8ece3", "#f6e3c9", "#e4def1"][i % 3] }}
-              >
-                ▣
-              </span>
             </label>
             <button className="cargo-title" onClick={() => setEditing(c)}>
               <strong>{c.name}</strong>
@@ -107,14 +106,17 @@ export function CargoList() {
               </button>
             </div>
             {c.quantity > 1 && (
-              <button
-                className="split"
-                onClick={() =>
-                  attempt(() => setInput(splitRequired(input, c.id, 1)))
-                }
-              >
-                1 шт. сделать {c.required ? "необязательной" : "обязательной"}
-              </button>
+              <details className="row-options">
+                <summary>Часть груза обязательна</summary>
+                <button
+                  className="split"
+                  onClick={() =>
+                    attempt(() => setInput(splitRequired(input, c.id, 1)))
+                  }
+                >
+                  1 шт. сделать {c.required ? "необязательной" : "обязательной"}
+                </button>
+              </details>
             )}
           </article>
         ))}

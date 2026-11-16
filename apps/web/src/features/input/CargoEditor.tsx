@@ -1,6 +1,8 @@
 import { randomId } from "@vlezet/domain";
 import { useState } from "react";
 import { cargoSchema, faces, type CargoType } from "@vlezet/domain";
+import { useDialogFocus } from "./useDialogFocus";
+import { IntegerInput } from "./IntegerInput";
 import { Measure } from "./Measure";
 import { FaceSelector } from "./FaceSelector";
 export function CargoEditor({
@@ -12,6 +14,7 @@ export function CargoEditor({
   onSave: (c: CargoType) => void;
   onClose: () => void;
 }) {
+  const dialogRef = useDialogFocus(onClose);
   const [draft, setDraft] = useState<CargoType>(
     cargo ?? {
       id: randomId(),
@@ -34,6 +37,7 @@ export function CargoEditor({
     <div className="modal-backdrop">
       <section
         className="modal"
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Редактор груза"
@@ -103,28 +107,17 @@ export function CargoEditor({
               value={draft.massG}
               onChange={(v) => patch({ massG: v })}
             />
-            <label>
-              Количество
-              <input
-                type="number"
-                min={1}
-                max={300}
-                required
-                value={draft.quantity}
-                onChange={(e) => patch({ quantity: Number(e.target.value) })}
-              />
-            </label>
-            <label>
-              Остановка
-              <input
-                type="number"
-                min={1}
-                max={100000}
-                required
-                value={draft.stop}
-                onChange={(e) => patch({ stop: Number(e.target.value) })}
-              />
-            </label>
+            <IntegerInput
+              label="Количество"
+              value={draft.quantity}
+              max={300}
+              onChange={(quantity) => patch({ quantity })}
+            />
+            <IntegerInput
+              label="Остановка"
+              value={draft.stop}
+              onChange={(stop) => patch({ stop })}
+            />
           </div>
           <label className="check">
             <input
@@ -134,34 +127,37 @@ export function CargoEditor({
             />
             Обязательный груз
           </label>
-          <FaceSelector
-            value={draft.allowedDownFaces}
-            onChange={(f) => patch({ allowedDownFaces: f })}
-          />
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={draft.maxTopLoadG !== null}
-              onChange={(e) =>
-                patch({ maxTopLoadG: e.target.checked ? 0 : null })
-              }
+          <details className="cargo-constraints">
+            <summary>Как можно ставить коробку</summary>
+            <FaceSelector
+              value={draft.allowedDownFaces}
+              onChange={(f) => patch({ allowedDownFaces: f })}
             />
-            Ограничить массу сверху
-          </label>
-          {draft.maxTopLoadG !== null && (
-            <Measure
-              label="Максимальная масса сверху, кг (0 — ничего)"
-              value={draft.maxTopLoadG}
-              unit="kg"
-              zero
-              onChange={(v) => patch({ maxTopLoadG: v })}
-            />
-          )}
-          <p className="hint">
-            Без ограничения — не проверяем прочность упаковки.
-          </p>
+            <label className="check">
+              <input
+                type="checkbox"
+                checked={draft.maxTopLoadG !== null}
+                onChange={(e) =>
+                  patch({ maxTopLoadG: e.target.checked ? 0 : null })
+                }
+              />
+              Ограничить массу сверху
+            </label>
+            {draft.maxTopLoadG !== null && (
+              <Measure
+                label="Максимальная масса сверху, кг (0 — ничего)"
+                value={draft.maxTopLoadG}
+                unit="kg"
+                zero
+                onChange={(v) => patch({ maxTopLoadG: v })}
+              />
+            )}
+            <p className="hint">
+              Без ограничения — не проверяем прочность упаковки.
+            </p>
+          </details>
           {error && <p role="alert">{error}</p>}
-          <div className="actions">
+          <div className="actions modal-actions">
             <button type="button" onClick={onClose}>
               Отмена
             </button>
