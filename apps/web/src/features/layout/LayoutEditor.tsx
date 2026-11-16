@@ -4,6 +4,7 @@ import type { Placement, Vec3Mm } from "@vlezet/domain";
 import { faces } from "@vlezet/domain";
 import { orientedDimensions } from "@vlezet/validation";
 import { restoreSolution } from "@vlezet/io";
+import { cargoInstanceNumber } from "../project/cargoLabel";
 import { useProject } from "../project/store";
 import { CargoScene, stopColors } from "../../scene/CargoScene";
 import {
@@ -33,10 +34,7 @@ export function LayoutEditor() {
   const boxLabel = (id: string) => {
     const instance = input.instances.find((i) => i.id === id)!;
     const cargo = input.cargoTypes.find((c) => c.id === instance.typeId)!;
-    const number =
-      input.instances
-        .filter((i) => i.typeId === cargo.id)
-        .findIndex((i) => i.id === id) + 1;
+    const number = cargoInstanceNumber(input, id);
     return `${cargo.name} · №${number}`;
   };
   const active = s.placements.find((p) => p.instanceId === selected);

@@ -524,6 +524,7 @@ th {
   padding: 10px 14px;
 }
 .cargo-scene {
+  isolation: isolate;
   height: 360px;
   background: #eff3e9;
   border-radius: 12px;
@@ -1173,4 +1174,38 @@ fieldset {
   .actions button {
     font-size: 13px;
   }
+}
+
+/* Labels stay readable independently of box dimensions and camera distance. */
+.scene-label {
+  padding: 5px 8px;
+  border: 1px solid #ccd3d9;
+  border-radius: 4px;
+  background: #fffffff5;
+  color: #243448;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  user-select: none;
+}
+.scene-cargo-label {
+  width: 240px;
+  max-width: 100%;
+  padding: 8px 10px;
+  border-color: #68816e;
+  text-align: left;
+}
+.scene-cargo-label strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.scene-cargo-label span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #4c5968;
 }

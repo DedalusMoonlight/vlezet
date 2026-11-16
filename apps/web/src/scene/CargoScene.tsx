@@ -13,7 +13,8 @@ import { Color, InstancedMesh, Matrix4, Plane, Vector3 } from "three";
 import type { Placement, ProjectInput, Vec3Mm } from "@vlezet/domain";
 import { orientedDimensions } from "@vlezet/validation";
 import { Label } from "./Label";
-import { scenePosition, sceneQuaternion } from "./orientationAdapter";
+import { cargoInstanceNumber } from "../features/project/cargoLabel";
+import { scenePosition } from "./orientationAdapter";
 export const stopColors = [
   "#7eab8c",
   "#dbb97f",
@@ -177,27 +178,10 @@ function Boxes({
                 <Edges color="#264c34" />
               </mesh>
               <Label
-                text={`${active.instanceId} · точка ${c.stop}`}
+                text={c.name}
+                detail={`№${cargoInstanceNumber(input, active.instanceId)} · остановка ${c.stop}`}
                 position={[0, h / 2000 + 0.1, 0]}
-                scale={Math.max(l / 1000, 0.5)}
               />
-              <group quaternion={sceneQuaternion(active.orientation)}>
-                <Label
-                  text="+Z верх"
-                  position={[0, 0, c.heightMm / 2000 + 0.07]}
-                  scale={0.35}
-                />
-                <Label
-                  text="+X перед"
-                  position={[c.lengthMm / 2000 + 0.07, 0, 0]}
-                  scale={0.35}
-                />
-                <Label
-                  text="+Y справа"
-                  position={[0, c.widthMm / 2000 + 0.07, 0]}
-                  scale={0.35}
-                />
-              </group>
             </group>
           );
         })()}
@@ -322,11 +306,7 @@ export function CargoScene({
                   </mesh>
                 );
               })()}
-            <Label
-              text="← Задние двери"
-              position={[-0.2, 0, -w / 2]}
-              scale={Math.max(w * 0.6, 0.6)}
-            />
+            <Label text="← Задние двери" position={[-0.2, 0, -w / 2]} />
             <OrbitControls
               makeDefault
               enabled={!drag}

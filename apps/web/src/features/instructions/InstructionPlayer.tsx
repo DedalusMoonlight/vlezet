@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { cargoInstanceNumber } from "../project/cargoLabel";
 import { useProject } from "../project/store";
 import { CargoScene } from "../../scene/CargoScene";
 import { freshPlayback, getStepScene, solutionRevision } from "./playback";
@@ -101,7 +102,8 @@ export function InstructionPlayer() {
           <>
             <strong>{type.name}</strong>
             <p>
-              {step.instanceId} · {type.massG / 1000} кг · точка {step.stop}
+              №{cargoInstanceNumber(input, step.instanceId)} ·{" "}
+              {type.massG / 1000} кг · остановка {step.stop}
             </p>
             <p className="hint">
               Снизу грань {placement?.orientation.downFace} · поворот{" "}

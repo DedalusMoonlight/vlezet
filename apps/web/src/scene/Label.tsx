@@ -1,34 +1,65 @@
-import { useMemo, useEffect } from "react";
-import { CanvasTexture, SRGBColorSpace } from "three";
+import { useEffect, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Group, Vector3, MathUtils } from "three";
+
 export function Label({
   text,
+  detail,
   position,
-  scale = 0.45,
 }: {
   text: string;
+  detail?: string;
   position: [number, number, number];
-  scale?: number;
 }) {
-  const texture = useMemo(() => {
-    const c = document.createElement("canvas");
-    c.width = 512;
-    c.height = 100;
-    const ctx = c.getContext("2d")!;
-    ctx.fillStyle = "#fffffff0";
-    ctx.fillRect(0, 0, 512, 100);
-    ctx.fillStyle = "#244c3a";
-    ctx.font = "500 38px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text.slice(0, 30), 256, 50, 490);
-    const t = new CanvasTexture(c);
-    t.colorSpace = SRGBColorSpace;
-    return t;
-  }, [text]);
-  useEffect(() => () => texture.dispose(), [texture]);
-  return (
-    <sprite position={position} scale={[scale, scale / 5.12, 1]}>
-      <spriteMaterial map={texture} depthTest={false} />
-    </sprite>
-  );
+  const group = useRef<Group>(null);
+  const element = useRef<HTMLDivElement | null>(null);
+  const projected = useRef(new Vector3());
+  const canvas = useThree((state) => state.gl.domElement);
+  useEffect(() => {
+    // A plain DOM overlay avoids a second React root inside the 3D renderer.
+    const label = document.createElement("div");
+    label.className = detail ? "scene-label scene-cargo-label" : "scene-label";
+    label.style.position = "absolute";
+    label.style.left = "0";
+    label.style.top = "0";
+    label.style.visibility = "hidden";
+    label.style.zIndex = detail ? "2" : "1";
+    if (detail) {
+      const name = document.createElement("strong");
+      name.textContent = text;
+      const description = document.createElement("span");
+      description.textContent = detail;
+      label.append(name, description);
+    } else label.textContent = text;
+    canvas.parentElement!.append(label);
+    element.current = label;
+    return () => {
+      element.current = null;
+      label.remove();
+    };
+  }, [canvas, text, detail]);
+  useFrame(({ camera, size }) => {
+    if (!group.current || !element.current) return;
+    const label = element.current;
+    group.current.updateWorldMatrix(true, false);
+    const p = projected.current
+      .setFromMatrixPosition(group.current.matrixWorld)
+      .project(camera);
+    label.style.visibility = p.z < -1 || p.z > 1 ? "hidden" : "visible";
+    label.style.maxWidth = `${Math.max(1, size.width - 24)}px`;
+    const halfWidth = label.offsetWidth / 2 + 8;
+    const halfHeight = label.offsetHeight / 2 + 8;
+    const x = MathUtils.clamp(
+      ((p.x + 1) * size.width) / 2,
+      halfWidth,
+      size.width - halfWidth,
+    );
+    const y = MathUtils.clamp(
+      ((1 - p.y) * size.height) / 2 - (detail ? halfHeight + 4 : 0),
+      halfHeight,
+      size.height - halfHeight,
+    );
+    label.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+  });
+  return <group ref={group} position={position} />;
 }
