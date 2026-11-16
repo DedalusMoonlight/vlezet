@@ -42,9 +42,11 @@ public class OfflineSmokeTest {
             assertEquals("true", js(scenario, "document.body.innerText.includes('Android · Работает офлайн')"));
             js(scenario, "document.querySelector('details.file-menu').open=false");
             assertEquals("true", js(scenario, "!!document.querySelector('canvas') && !!document.querySelector('canvas').getContext('webgl2')"));
+            js(scenario, "window.__smokeBeforeReload = true");
             scenario.onActivity(activity -> activity.getBridge().getWebView().reload());
-            waitFor(scenario, "document.body.innerText.includes('План готов')");
-            js(scenario, "[...document.querySelectorAll('.section-nav button')].find(b=>b.textContent==='План').click()");
+            waitFor(scenario, "window.__smokeBeforeReload !== true && document.readyState === 'complete' && document.body.innerText.includes('План готов')");
+            js(scenario, "[...document.querySelectorAll('.section-nav button')].find(b=>b.textContent.trim()==='План').click()");
+            waitFor(scenario, "document.querySelector('.result-column').getClientRects().length > 0 && [...document.querySelectorAll('.section-nav button')].some(b=>b.textContent.trim()==='План' && b.getAttribute('aria-pressed')==='true')");
             js(scenario, "document.querySelector('.result-column').scrollIntoView()");
             Thread.sleep(500);
             // The runner may uninstall the app after tests. Keep the screenshot outside app data.
