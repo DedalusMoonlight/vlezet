@@ -23,6 +23,8 @@ export default defineConfig(({ mode }) => ({
       VitePWA({
         registerType: "prompt",
         includeAssets: [
+          "LICENSE.txt",
+          "LICENSING.txt",
           "fonts/NotoSans.ttf",
           "fonts/OFL.txt",
           "icons/icon-192.png",

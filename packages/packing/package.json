@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "exports": "./src/index.ts",
-  "license": "MIT"
+  "license": "PolyForm-Noncommercial-1.0.0"
 }

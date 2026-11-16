@@ -5,7 +5,7 @@
 «Влезет» помогает подготовить переезд, доставку или рейс малого бизнеса. Укажите размеры кузова, добавьте коробки и порядок остановок — получите раскладку и пошаговую 3D-инструкцию загрузки и выгрузки.
 
 [![Скачать для Android](https://img.shields.io/badge/Скачать_для_Android-GitHub_Releases-3c7052?style=for-the-badge&logo=android&logoColor=white)](https://github.com/DedalusMoonlight/vlezet/releases)
-[![Лицензия MIT](https://img.shields.io/badge/Лицензия-MIT-blue?style=for-the-badge)](LICENSE)
+[![Лицензия PolyForm Noncommercial](https://img.shields.io/badge/Лицензия-PolyForm_Noncommercial-blue?style=for-the-badge)](LICENSE)
 
 [Как пользоваться](docs/guide.md) · [Установка на Android](docs/android.md) · [Запуск своего сервера](docs/running.md)
 
@@ -59,4 +59,10 @@ npm run dev
 
 ## Лицензия
 
-[MIT](LICENSE) — можно использовать, изменять и распространять приложение, в том числе в коммерческих проектах, сохраняя уведомление об авторстве и текст лицензии. Сторонние библиотеки распространяются по своим лицензиям; для встроенного шрифта Noto Sans действует [SIL Open Font License](apps/web/public/fonts/OFL.txt).
+Текущая версия приложения и исходного кода распространяется по [PolyForm Noncommercial 1.0.0](LICENSE). Некоммерческое использование, изменение и распространение разрешены бесплатно на условиях лицензии. Для коммерческого использования, не разрешённого её условиями, требуется отдельное соглашение с правообладателем.
+
+Например, планирование личного переезда бесплатно; использование новой версии для платных перевозок или доставки магазина требует коммерческого разрешения. Стандартная лицензия также разрешает использование организациями, перечисленными в разделе Noncommercial Organizations.
+
+Это **source-available** проект: исходники доступны, коммерческое использование ограничено. [Условия, примеры и запрос коммерческой лицензии](docs/licensing.md).
+
+Версия [0.1.7](https://github.com/DedalusMoonlight/vlezet/releases/tag/v0.1.7) и ранее опубликованный под MIT код сохраняют [прежние права MIT](https://github.com/DedalusMoonlight/vlezet/blob/6eea6901958a3618f8800dec134b3a0b745a9eef/LICENSE). Сторонние библиотеки сохраняют собственные лицензии; встроенный Noto Sans — [SIL Open Font License](apps/web/public/fonts/OFL.txt).

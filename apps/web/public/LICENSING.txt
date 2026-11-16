@@ -1,0 +1,25 @@
+Влезет. Покажем, как
+Copyright (c) 2026 Timur Tahil
+
+Текущая версия приложения и исходного кода предоставляется по
+PolyForm Noncommercial License 1.0.0.
+Переход принят 16 ноября 2026 года после версии 0.1.7
+(коммит 6eea6901958a3618f8800dec134b3a0b745a9eef).
+Полный текст: LICENSE.txt
+https://polyformproject.org/licenses/noncommercial/1.0.0
+
+Некоммерческое использование бесплатно на условиях лицензии.
+Стандартные разрешения раздела Noncommercial Organizations действуют.
+Коммерческое использование вне разрешений лицензии требует отдельного
+соглашения с правообладателем. Условия и стоимость согласуются отдельно.
+Запрос: https://github.com/DedalusMoonlight/vlezet/issues/new?title=Commercial%20license
+
+Ранее опубликованные под MIT версии, включая 0.1.7,
+сохраняют прежние права MIT, в том числе на коммерческое использование.
+Исторический текст прежней лицензии:
+https://github.com/DedalusMoonlight/vlezet/blob/6eea6901958a3618f8800dec134b3a0b745a9eef/LICENSE
+Сторонние компоненты сохраняют собственные лицензии.
+Встроенный шрифт Noto Sans: fonts/OFL.txt (SIL Open Font License).
+
+Подробности:
+https://github.com/DedalusMoonlight/vlezet/blob/main/docs/licensing.md

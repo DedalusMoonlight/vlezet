@@ -8,6 +8,8 @@
 
 ## Что нового
 
+- Для дальнейших изменений проекта действует PolyForm Noncommercial: некоммерческое использование бесплатно на условиях лицензии; коммерческое использование вне её разрешений требует отдельного соглашения. Права на ранее выпущенный MIT-код сохраняются.
+
 - Расширенный каталог: LADA Largus, Volkswagen Transporter 6.1, Caddy Life / Maxi, Renault Dokker и Trafic.
 - Отдельные варианты базы, крыши и расположения сидений; ссылки на заводские размеры у каждой модели.
 - Неподтверждённые размеры остаются пустыми для ваших замеров. У Largus-фургона предзаполнена только подтверждённая длина.
@@ -27,4 +29,4 @@
 
 [Руководство пользователя](https://github.com/DedalusMoonlight/vlezet/blob/main/docs/guide.md) · [Установка и обновление](https://github.com/DedalusMoonlight/vlezet/blob/main/docs/android.md) · [Веб-версия на своём сервере](https://github.com/DedalusMoonlight/vlezet/blob/main/docs/running.md)
 
-В Assets доступны APK, контрольная сумма SHA-256 и сведения о сборке. Исходный код распространяется по [лицензии MIT](https://github.com/DedalusMoonlight/vlezet/blob/main/LICENSE).
+В Assets доступны APK, контрольная сумма SHA-256 и сведения о сборке. Приложение и исходный код распространяются на условиях [PolyForm Noncommercial 1.0.0](https://github.com/DedalusMoonlight/vlezet/blob/v${VLEZET_VERSION}/LICENSE), с сохранением прежних прав на MIT-код и лицензий зависимостей. [Условия коммерческого использования](https://github.com/DedalusMoonlight/vlezet/blob/v${VLEZET_VERSION}/docs/licensing.md).

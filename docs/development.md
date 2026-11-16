@@ -49,4 +49,4 @@ cd android
 
 APK появится в `android/app/build/outputs/apk/debug/`. Для установки сборок поверх друг друга нужен один и тот же ключ подписи. Храните ключ и пароли вне репозитория. Пользовательские APK и инструкции установки находятся в [Releases](https://github.com/DedalusMoonlight/vlezet/releases).
 
-[Размещение веб-версии и API](running.md) · [Лицензия MIT](../LICENSE)
+[Размещение веб-версии и API](running.md) · [Условия лицензирования](licensing.md)
