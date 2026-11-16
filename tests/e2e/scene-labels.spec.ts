@@ -31,6 +31,8 @@ test("3D labels preserve user names and stay readable when zoomed out", async ({
     .getByRole("button", { name: "Рассчитать загрузку", exact: true })
     .click();
   await expect(page.getByText("План готов", { exact: true })).toBeVisible();
+  // The result can arrive before WebGL has drawn its first frame.
+  await expect(page.getByText("← Задние двери", { exact: true })).toBeVisible();
   await page.locator(".cargo-scene canvas").click();
   const label = page.locator(".scene-cargo-label");
   await expect(label).toBeVisible();

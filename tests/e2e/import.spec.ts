@@ -13,7 +13,9 @@ test("imports decimal comma CSV after explicit preview", async ({ page }) => {
     .getByRole("button", { name: "Импортировать груз", exact: true })
     .click();
   await section(page, "Груз");
-  await expect(
-    page.getByRole("button", { name: /Ящик 40.5 × 30 × 20 см/ }),
-  ).toBeVisible();
+  const imported = page.locator(".cargo-row").filter({
+    has: page.getByRole("button", { name: /^Ящик(?:\s|$)/ }),
+  });
+  await expect(imported).toBeVisible();
+  await expect(imported).toContainText("40.5 × 30 × 20 см");
 });
