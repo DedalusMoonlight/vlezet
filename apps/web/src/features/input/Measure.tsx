@@ -9,7 +9,7 @@ export function Measure({
   onValidityChange,
 }: {
   label: string;
-  value: number;
+  value: number | null;
   onChange: (v: number) => void;
   unit?: "mm" | "cm" | "m" | "g" | "kg";
   zero?: boolean;
@@ -17,7 +17,9 @@ export function Measure({
 }) {
   const id = useId();
   const divisor = { mm: 1, cm: 10, m: 1000, g: 1, kg: 1000 }[unit];
-  const [text, setText] = useState(String(value / divisor));
+  const [text, setText] = useState(
+    value === null ? "" : String(value / divisor),
+  );
   const [error, setError] = useState("");
   const [rounded, setRounded] = useState<number | null>(null);
   const accept = (n: number) => {

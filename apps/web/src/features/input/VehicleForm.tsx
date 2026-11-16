@@ -12,13 +12,16 @@ export function VehicleForm({
   const { input, setInput } = useProject();
   const [preset, setPreset] = useState("");
   const [draft, setDraft] = useState<Vehicle>(input.vehicle);
-  const [payload, setPayload] = useState(true);
   const [confirmed, setConfirmed] = useState(true);
   const [error, setError] = useState("");
   const [key, setKey] = useState(0);
   const v = vehicles.find((x) => x.id === preset);
+  const complete = Object.values(draft).every(
+    (n) => Number.isSafeInteger(n) && n > 0,
+  );
   const dirty =
     JSON.stringify(draft) !== JSON.stringify(input.vehicle) ||
+    !complete ||
     !confirmed ||
     Object.values(validity).some((valid) => !valid);
   useEffect(() => {
@@ -32,7 +35,7 @@ export function VehicleForm({
           e.preventDefault();
           if (
             Object.values(validity).some((valid) => !valid) ||
-            !payload ||
+            !complete ||
             !confirmed ||
             e.currentTarget.querySelector('[aria-invalid="true"]')
           ) {
@@ -58,26 +61,36 @@ export function VehicleForm({
               const p = vehicles.find((x) => x.id === e.target.value);
               if (p) {
                 setDraft({
-                  lengthMm: p.lengthMm,
-                  widthMm: p.widthMm,
-                  heightMm: p.heightMm,
-                  payloadG: input.vehicle.payloadG,
+                  lengthMm: p.lengthMm ?? 0,
+                  widthMm: p.widthMm ?? 0,
+                  heightMm: p.heightMm ?? 0,
+                  payloadG: 0,
                 });
                 setKey((k) => k + 1);
                 setValidity((v) => ({
                   wallGap: v.wallGap ?? true,
                   horizontalGap: v.horizontalGap ?? true,
+                  lengthMm: p.lengthMm !== null,
+                  widthMm: p.widthMm !== null,
+                  heightMm: p.heightMm !== null,
+                  payload: false,
                 }));
                 setConfirmed(false);
-                setPayload(false);
+                setError("");
               }
             }}
           >
             <option value="">Свои размеры</option>
-            {vehicles.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.name}
-              </option>
+            {[...new Set(vehicles.map((x) => x.brand))].map((brand) => (
+              <optgroup key={brand} label={brand}>
+                {vehicles
+                  .filter((x) => x.brand === brand)
+                  .map((x) => (
+                    <option key={x.id} value={x.id}>
+                      {x.name}
+                    </option>
+                  ))}
+              </optgroup>
             ))}
           </select>
         </label>
@@ -87,7 +100,7 @@ export function VehicleForm({
               label={["Длина, см", "Ширина, см", "Высота, см"][i]}
               key={k}
               unit="cm"
-              value={draft[k]}
+              value={draft[k] || null}
               onValidityChange={(valid) =>
                 setValidity((v) => ({ ...v, [k]: valid }))
               }
@@ -102,41 +115,70 @@ export function VehicleForm({
           key={"mass" + key}
           label="Доступная грузоподъёмность, кг"
           unit="kg"
-          value={draft.payloadG}
+          value={draft.payloadG || null}
           onValidityChange={(valid) =>
             setValidity((v) => ({ ...v, payload: valid }))
           }
           onChange={(n) => {
             setDraft((d) => ({ ...d, payloadG: n }));
-            setPayload(true);
             setConfirmed(false);
           }}
         />
         {v && (
-          <p className="hint">
-            {v.note}{" "}
-            <a href={v.source} target="_blank" rel="noreferrer">
-              Источник производителя
-            </a>{" "}
-            · проверен {v.checkedAt}. Грузоподъёмность укажите по документам
-            своей машины, с учётом людей и оборудования.
-          </p>
+          <>
+            {(v.widthMm === null ||
+              v.heightMm === null ||
+              v.lengthMm === null) && (
+              <p className="hint">
+                Не все размеры подтверждены производителем. Заполните пустые
+                поля по замерам своей машины.
+              </p>
+            )}
+            <details>
+              <summary>Размеры и источник</summary>
+              <p className="hint">{v.note}</p>
+              <p className="hint">
+                <a href={v.source} target="_blank" rel="noreferrer">
+                  Источник производителя
+                </a>
+                {v.additionalSource && (
+                  <>
+                    {" "}
+                    ·{" "}
+                    <a
+                      href={v.additionalSource}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Дополнительный источник
+                    </a>
+                  </>
+                )}{" "}
+                · проверен {v.checkedAt}.
+              </p>
+            </details>
+          </>
         )}
+        <p className="hint">
+          Доступную массу груза укажите по документам своей машины, с учётом
+          людей и оборудования. Каталог не подставляет максимальную массу из
+          рекламы.
+        </p>
         <label className="check">
           <input
             type="checkbox"
             checked={confirmed}
             onChange={(e) => {
               setConfirmed(e.target.checked);
-              setPayload(e.target.checked);
             }}
           />
           Подтверждаю размеры свободного прямоугольника и доступную
           грузоподъёмность
         </label>
         <p className="hint">
-          Замерьте свободный объём и проём. Арки и выступы должны остаться за
-          пределами прямоугольника.
+          Размеры из каталога — отправная точка для замера. Проверьте свободный
+          прямоугольник по всей высоте и задний проём: обшивка, наклон сидений,
+          арки и выступы уменьшают место.
         </p>
         {error && <p role="alert">{error}</p>}
         <button type="submit" disabled={!dirty}>

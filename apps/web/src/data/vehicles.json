@@ -1,5 +1,127 @@
 [
   {
+    "id": "largus-van",
+    "brand": "LADA",
+    "name": "LADA Largus · фургон до рестайлинга",
+    "lengthMm": 1940,
+    "widthMm": null,
+    "heightMm": null,
+    "source": "https://static.lada.ru/files/brochures/models_pdf/Largus_furgon-brochures.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Бензиновый двухместный фургон до рестайлинга, моторы 87/106 л.с.; не универсал и не CNG. Брошюра LADA Largus van, стр. 5: длина отсека 1940 мм. Ширина между арками и высота заднего проёма в ней не указаны — замерьте их. Длина у перегородки по всей высоте тоже требует проверки."
+  },
+  {
+    "id": "transporter-t61-swb",
+    "brand": "Volkswagen",
+    "name": "VW Transporter 6.1 · короткий, низкая крыша",
+    "lengthMm": 2572,
+    "widthMm": 1244,
+    "heightMm": 1299,
+    "source": "https://www.volkswagenvans.ie/idhub/content/dam/onehub_nfz/importers/ie/models/downloads/january-2024/MY23%20T6.1%20Panel%20Van%20Brochure.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Грузовой фургон MY2023, без перегородки; не Kombi/Caravelle. Брошюра Volkswagen Ireland, стр. 20: длина по полу без перегородки 2572 мм, ширина между арками 1244 мм, высота заднего проёма 1299 мм. Это ограниченный прямоугольник, а не весь объём отсека. С перегородкой или обшивкой замерьте оставшееся место."
+  },
+  {
+    "id": "transporter-t61-lwb",
+    "brand": "Volkswagen",
+    "name": "VW Transporter 6.1 · длинный, низкая крыша",
+    "lengthMm": 2975,
+    "widthMm": 1244,
+    "heightMm": 1299,
+    "source": "https://www.volkswagenvans.ie/idhub/content/dam/onehub_nfz/importers/ie/models/downloads/january-2024/MY23%20T6.1%20Panel%20Van%20Brochure.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Грузовой фургон MY2023, без перегородки; не Kombi/Caravelle. Брошюра Volkswagen Ireland, стр. 20: длина по полу без перегородки 2975 мм, ширина между арками 1244 мм, высота заднего проёма 1299 мм. Это ограниченный прямоугольник, а не весь объём отсека. С перегородкой или обшивкой замерьте оставшееся место."
+  },
+  {
+    "id": "transporter-t61-lwb-high",
+    "brand": "Volkswagen",
+    "name": "VW Transporter 6.1 · длинный, высокая крыша",
+    "lengthMm": 2975,
+    "widthMm": 1244,
+    "heightMm": 1694,
+    "source": "https://www.volkswagenvans.ie/idhub/content/dam/onehub_nfz/importers/ie/models/downloads/january-2024/MY23%20T6.1%20Panel%20Van%20Brochure.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Грузовой фургон MY2023, без перегородки; не Kombi/Caravelle. Брошюра Volkswagen Ireland, стр. 20: длина по полу без перегородки 2975 мм, ширина между арками 1244 мм, высота заднего проёма 1694 мм. Это ограниченный прямоугольник, а не весь объём отсека. С перегородкой или обшивкой замерьте оставшееся место."
+  },
+  {
+    "id": "caddy5-swb-2",
+    "brand": "Volkswagen",
+    "name": "VW Caddy Life V · 2 места / задние ряды сняты",
+    "lengthMm": 1913,
+    "widthMm": 1185,
+    "heightMm": 1122,
+    "source": "https://www.volkswagen-vans.co.uk/idhub/content/dam/onehub_nfz/importers/gb/downloads/dimensions/Dimension-Drawings-Caddy_Life.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Пассажирское пятое поколение Caddy, не Caddy IV и не Cargo. Второй и третий ряды сняты полностью, не просто сложены. Заводской чертёж Caddy/Caddy Life, стр. 1: длина пола 1913 мм, ширина отсека B1 1185 мм; высота уменьшена до заднего проёма 1122 мм. Для высокой укладки проверьте наклон спинок, потолок и обшивку; снимите багажную полку."
+  },
+  {
+    "id": "caddy5-maxi-2",
+    "brand": "Volkswagen",
+    "name": "VW Caddy Maxi Life V · 2 места / задние ряды сняты",
+    "lengthMm": 2265,
+    "widthMm": 1185,
+    "heightMm": 1122,
+    "source": "https://www.volkswagen-vans.co.uk/idhub/content/dam/onehub_nfz/importers/gb/downloads/dimensions/Dimension-Drawings-Caddy_Life.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Пассажирское пятое поколение Caddy, не Caddy IV и не Cargo. Второй и третий ряды сняты полностью, не просто сложены. Заводской чертёж Caddy/Caddy Life, стр. 1: длина пола 2265 мм, ширина отсека B1 1185 мм; высота уменьшена до заднего проёма 1122 мм. Для высокой укладки проверьте наклон спинок, потолок и обшивку; снимите багажную полку."
+  },
+  {
+    "id": "caddy5-swb-5",
+    "brand": "Volkswagen",
+    "name": "VW Caddy Life V · 5 мест / третий ряд снят",
+    "lengthMm": 1100,
+    "widthMm": 1185,
+    "heightMm": 1122,
+    "source": "https://www.volkswagen-vans.co.uk/idhub/content/dam/onehub_nfz/importers/gb/downloads/dimensions/Dimension-Drawings-Caddy_Life.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Пассажирское пятое поколение Caddy, не Caddy IV и не Cargo. Второй ряд установлен, третий снят (если был). Заводской чертёж Caddy/Caddy Life, стр. 1: длина пола 1100 мм, ширина отсека B1 1185 мм; высота уменьшена до заднего проёма 1122 мм. Для высокой укладки проверьте наклон спинок, потолок и обшивку; снимите багажную полку."
+  },
+  {
+    "id": "caddy5-maxi-5",
+    "brand": "Volkswagen",
+    "name": "VW Caddy Maxi Life V · 5 мест / третий ряд снят",
+    "lengthMm": 1452,
+    "widthMm": 1185,
+    "heightMm": 1122,
+    "source": "https://www.volkswagen-vans.co.uk/idhub/content/dam/onehub_nfz/importers/gb/downloads/dimensions/Dimension-Drawings-Caddy_Life.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Пассажирское пятое поколение Caddy, не Caddy IV и не Cargo. Второй ряд установлен, третий снят (если был). Заводской чертёж Caddy/Caddy Life, стр. 1: длина пола 1452 мм, ширина отсека B1 1185 мм; высота уменьшена до заднего проёма 1122 мм. Для высокой укладки проверьте наклон спинок, потолок и обшивку; снимите багажную полку."
+  },
+  {
+    "id": "dokker-van",
+    "brand": "Renault",
+    "name": "Renault Dokker Van · 2 места, 2020",
+    "lengthMm": 1856,
+    "widthMm": 1082,
+    "heightMm": 1100,
+    "source": "https://cdn.group.renault.com/ren/ua/2020/pdf/dokker-van-brochure.pdf.asset.pdf/cfad9a0b0d.pdf",
+    "additionalSource": "https://www.renault.ua/vans/dokker-van/engines.html",
+    "checkedAt": "2026-11-16",
+    "note": "Фургон Renault, не пассажирский Dokker. Брошюра Renault Украина 11/2020, стр. 5: из диапазона длины по полу 1856–1901 мм взято 1856; из ширины между арками 1130–1170 мм и верхней ширины заднего проёма N2 1082 мм взято 1082. Высота проёма H2 1100 мм. Удлинение со снятым передним пассажирским сиденьем не используется. Проверьте выступы перегородки."
+  },
+  {
+    "id": "trafic-iii-l1",
+    "brand": "Renault",
+    "name": "Renault Trafic III · L1H1, фургон",
+    "lengthMm": 2537,
+    "widthMm": 1268,
+    "heightMm": 1320,
+    "source": "https://cdn.group.renault.com/ren/gb/transversal-assets/brochures/van-ebrochures/NEW-TRAFIC-eBrochure.pdf.asset.pdf/035d904b67.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Trafic III после обновления передней части, грузовой фургон с одним рядом сидений и низкой крышей, не Passenger/Crew. Брошюра Renault UK, раздел dimensions and volumes, стр. 17 (лист 16 PDF): длина по полу без люка 2537 мм, ширина между арками 1268 мм, загрузочная высота 1320 мм. Люк для длинномеров и пространство под передним сиденьем не включены; проверьте перегородку по всей высоте."
+  },
+  {
+    "id": "trafic-iii-l2",
+    "brand": "Renault",
+    "name": "Renault Trafic III · L2H1, фургон",
+    "lengthMm": 2937,
+    "widthMm": 1268,
+    "heightMm": 1320,
+    "source": "https://cdn.group.renault.com/ren/gb/transversal-assets/brochures/van-ebrochures/NEW-TRAFIC-eBrochure.pdf.asset.pdf/035d904b67.pdf",
+    "checkedAt": "2026-11-16",
+    "note": "Trafic III после обновления передней части, грузовой фургон с одним рядом сидений и низкой крышей, не Passenger/Crew. Брошюра Renault UK, раздел dimensions and volumes, стр. 17 (лист 16 PDF): длина по полу без люка 2937 мм, ширина между арками 1268 мм, загрузочная высота 1320 мм. Люк для длинномеров и пространство под передним сиденьем не включены; проверьте перегородку по всей высоте."
+  },
+  {
     "id": "custom-l1",
     "name": "Ford Transit Custom L1 H1 · 2023",
     "lengthMm": 2394,
@@ -8,7 +130,8 @@
     "source": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/price-list/commercial-vehicles/PL-New_Transit_Custom-20_January_2023.pdf",
     "additionalSource": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/brochures/commercial-vehicles/BRO-New_Transit_Custom.pdf",
     "checkedAt": "2026-11-15",
-    "note": "Длина по верхней части перегородки; ширина между арками; высота ограничена задним проёмом из брошюры этой версии."
+    "note": "Длина по верхней части перегородки; ширина между арками; высота ограничена задним проёмом из брошюры этой версии.",
+    "brand": "Ford"
   },
   {
     "id": "custom-l2",
@@ -19,7 +142,8 @@
     "source": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/price-list/commercial-vehicles/PL-New_Transit_Custom-20_January_2023.pdf",
     "additionalSource": "https://www.ford.co.uk/content/dam/guxeu/uk/documents/brochures/commercial-vehicles/BRO-New_Transit_Custom.pdf",
     "checkedAt": "2026-11-15",
-    "note": "Длина по верхней части перегородки; ширина между арками; высота заднего проёма."
+    "note": "Длина по верхней части перегородки; ширина между арками; высота заднего проёма.",
+    "brand": "Ford"
   },
   {
     "id": "connect-swb",
@@ -29,7 +153,8 @@
     "heightMm": 1122,
     "source": "https://www.ford.co.uk/support/how-tos/electric-vehicles/hybrid-hybrid-plug-in/ford-transit-and-tourneo-connect-phev",
     "checkedAt": "2026-11-15",
-    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van SWB, не Tourneo."
+    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van SWB, не Tourneo.",
+    "brand": "Ford"
   },
   {
     "id": "connect-lwb",
@@ -39,7 +164,8 @@
     "heightMm": 1122,
     "source": "https://www.ford.co.uk/support/how-tos/electric-vehicles/hybrid-hybrid-plug-in/ford-transit-and-tourneo-connect-phev",
     "checkedAt": "2026-11-15",
-    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van LWB."
+    "note": "Длина до самой выступающей части перегородки; ширина между арками; высота заднего проёма. Именно Van LWB.",
+    "brand": "Ford"
   },
   {
     "id": "courier",
@@ -49,6 +175,7 @@
     "heightMm": 1120,
     "source": "https://media.ford.com/content/dam/fordmedia/Europe/en/2024/01/2024_TRANSIT_COURIER_TECHNICAL_SPECIFICATION_EU.pdf",
     "checkedAt": "2026-11-15",
-    "note": "Длина без люка; ширина между арками; высота ограничена задним проёмом. Проверьте выступы перегородки по всей высоте."
+    "note": "Длина без люка; ширина между арками; высота ограничена задним проёмом. Проверьте выступы перегородки по всей высоте.",
+    "brand": "Ford"
   }
 ]
